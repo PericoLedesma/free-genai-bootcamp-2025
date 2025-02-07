@@ -18,7 +18,7 @@ Currently, the platform serves **300 active students**, all of whom are located 
 - The payment system will be **seamlessly integrated** into the Lang Portal, ensuring **easy access** for students while supporting **teacher involvement** in learning sessions.  
 
 ## Considerations  
-
+e
 - The AI model should be **self-hosted** to ensure **data privacy** and **cost control**, reducing dependency on third-party cloud services.  
 
 - We need to ensure that the **RAG system** used for **sentence construction** can **retrieve relevant language data efficiently** while maintaining accuracy.  
