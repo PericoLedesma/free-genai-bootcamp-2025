@@ -14,7 +14,7 @@ The bootcamp covers:
 
 
 ## Application Overview
-### Functional Requirements
+#### - Functional Requirements
 
 The company aims to develop a **language learning platform** that provides an **interactive and immersive experience** for students.  
 
@@ -24,14 +24,14 @@ To achieve this, they plan to **invest in their own AI infrastructure**, specifi
 
 Currently, the platform serves **300 active students**, all of whom are located within the city of **Nagasaki**.  
 
-### Assumptions  
+#### - Assumptions  
 
 - We assume that the AI-powered **sentence constructor** and **study activities** will significantly improve student engagement and retention.  
 - The system will rely on a **local database** (Lang Core 2000 words) while integrating **retrieval-augmented generation (RAG)** for sentence-building tasks.  
 - The company is **prioritizing self-hosted AI solutions** over cloud-based alternatives to **maintain control over operational costs and privacy concerns**.  
 - The payment system will be **seamlessly integrated** into the Lang Portal, ensuring **easy access** for students while supporting **teacher involvement** in learning sessions.  
 
-### Considerations  
+#### - Considerations  
 
 - The AI model should be **self-hosted** to ensure **data privacy** and **cost control**, reducing dependency on third-party cloud services.  
 
@@ -45,7 +45,7 @@ Currently, the platform serves **300 active students**, all of whom are located 
 
 ## Estructure
 
-### Backend (Flask API)
+#### - Backend (Flask API)
 
 - **Python** with **Flask** as the web framework
 - **SQLite3** as the database
@@ -53,7 +53,7 @@ Currently, the platform serves **300 active students**, all of whom are located 
 - **Invoke** for task running/automation
 - **Pytest** for testing
 
-### Frontend (React App)
+#### - Frontend (React App)
 
 Based on the frontend prompt requirements:
 
@@ -62,3 +62,9 @@ Based on the frontend prompt requirements:
 - **Tailwind CSS** for styling
 - **Vite.js** as the development server/bundler
 - **ShadCN** for UI components
+
+
+----- 
+## Journal
+
+#### - Week 0: Project Kickoff
