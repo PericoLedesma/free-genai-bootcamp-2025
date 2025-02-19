@@ -9,10 +9,10 @@ A language learning school wants to build a prototype of learning portal which w
 
 ## Technical Requirements
 
-- The backend will be built using Go
+- The backend will be built using python
 - The database will be SQLite3
-- The API will be built using Gin
--Mage is a task runner for Go.
+- The API will be built using FastAPI
+- Mage is a task runner for python
 - The API will always return JSON
 - There will no authentication or authorization
 - Everything be treated as a single user
@@ -20,24 +20,72 @@ A language learning school wants to build a prototype of learning portal which w
 ## Directory Structure
 
 ```text
-backend_go/
-├── cmd/
-│   └── server/
-├── internal/
-│   ├── models/     # Data structures and database operations
-│   ├── handlers/   # HTTP handlers organized by feature (dashboard, words, groups, etc.)
-│   └── service/    # Business logic
+backend_python/
+├── app/
+│   ├── main.py
+│   ├── models.py
+│   ├── schemas.py
+│   ├── crud.py
+│   ├── database.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── endpoints/
+│   │   │   ├── words.py
+│   │   │   ├── groups.py
+│   │   │   ├── study_sessions.py
+│   │   │   ├── study_activities.py
+│   │   │   ├── dashboard.py
+│   │   │   ├── reset.py
 ├── db/
 │   ├── migrations/
-│   └── seeds/      # For initial data population
-├── magefile.go
-├── go.mod
+│   │   ├── 0001_init.sql
+│   │   ├── 0002_create_words_table.sql
+│   │   ├── ...
+│   ├── seeds/
+│   │   ├── words.json
+│   │   ├── groups.json
+│   │   ├── ...
+├── tasks.py
+├── requirements.txt
 └── words.db
 ```
 
+ • `app/`: Contains the main application code.
+
+  - `main.py`: The entry point of the application.
+  - `models.py`: Defines the database models.
+  - `schemas.py`: Defines the data schemas for request and response validation.
+  - `crud.py`: Contains the CRUD (Create, Read, Update, Delete) operations.
+  - `database.py`: Manages the database connection and setup.
+  - `api/`: Contains the API endpoints.
+    - `__init__.py`: Initializes the API module.
+    - `endpoints/`: Contains individual endpoint definitions.
+      - `words.py`: Endpoints for managing words.
+      - `groups.py`: Endpoints for managing groups.
+      - `study_sessions.py`: Endpoints for managing study sessions.
+      - `study_activities.py`: Endpoints for managing study activities.
+      - `dashboard.py`: Endpoints for dashboard statistics.
+      - `reset.py`: Endpoints for reset operations.
+
+ • `db/`: Contains database-related files.
+
+  - `migrations/`: SQL files for database migrations.
+    - `0001_init.sql`: Initial migration script.
+    - `0002_create_words_table.sql`: Script to create the words table.
+  - `seeds/`: JSON files for seeding the database with initial data.
+    - `words.json`: Seed data for words.
+    - `groups.json`: Seed data for groups.
+
+ • `tasks.py`: Contains task definitions for initializing, migrating, and seeding the database.
+
+ • `requirements.txt`: Lists the dependencies required for the project.
+
+ • `words.db`: The SQLite database file.
+
+------ 
 ## Database Schema
 
-Our database will be a single sqlite database called `words.db` that will be in the root of the project folder of `backend_go`
+Our database will be a single sqlite database called `words.db` that will be in the root of the project folder of `backend_python`
 
 We have the following tables:
 - words - stored vocabulary words
@@ -67,7 +115,8 @@ We have the following tables:
   - study_session_id integer
   - correct boolean
   - created_at datetime
-
+  - 
+----- 
 ## API Endpoints
 - GET /api/study_activities/: id/study_sessions
 - POST /api/study_activities
@@ -192,8 +241,7 @@ Returns quick overview statistics.
 {
   "items": [
     {
-      "japanese": "こんにちは",
-      "romaji": "konnichiwa",
+      "german": "Hallo",
       "english": "hello",
       "correct_count": 5,
       "wrong_count": 2
@@ -212,8 +260,7 @@ Returns quick overview statistics.
 #### JSON Response
 ```json
 {
-  "japanese": "こんにちは",
-  "romaji": "konnichiwa",
+  "german": "hallo",
   "english": "hello",
   "stats": {
     "correct_count": 5,
@@ -267,8 +314,7 @@ Returns quick overview statistics.
 {
   "items": [
     {
-      "japanese": "こんにちは",
-      "romaji": "konnichiwa",
+      "german": "hallo",
       "english": "hello",
       "correct_count": 5,
       "wrong_count": 2
@@ -350,8 +396,7 @@ Returns quick overview statistics.
 {
   "items": [
     {
-      "japanese": "こんにちは",
-      "romaji": "konnichiwa",
+      "german": "hallo",
       "english": "hello",
       "correct_count": 5,
       "wrong_count": 2
@@ -437,9 +482,8 @@ In our task we should have DSL to specific each seed file and its expected group
 ```json
 [
   {
-    "kanji": "払う",
-    "romaji": "harau",
-    "english": "to pay",
+    "german": "bezahlen",
+    "english": "to pay"
   },
   ...
 ]

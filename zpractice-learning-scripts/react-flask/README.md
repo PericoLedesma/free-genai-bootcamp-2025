@@ -145,7 +145,7 @@ export default App;
 - The message is displayed in the UI, with "Loading..." shown until the data is fetched.
 
 ### Start React
-Run the following command:
+Run the following command in the frontend directory to start the React development server:
 ```bash
 npm start
 ```

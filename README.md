@@ -68,3 +68,32 @@ Based on the frontend prompt requirements:
 ## Journal
 
 #### - Week 0: Project Kickoff
+
+#### - Week 1: Backend Development
+
+ Backend Project Setup
+
+ 1. Set up the project structure:
+
+- Create a new directory for the backend project.
+- Initialize a Python virtual environment.
+- Install necessary dependencies (FastAPI, SQLite, and Mage).
+
+ 2. Define the database schema:
+
+- Create an SQLite database named `words.db`.
+- Define tables for words, word groups, study sessions, study activities, and word review items.
+
+ 3. Implement the API endpoints:
+
+- Create endpoints for fetching and managing words, groups, study sessions, and study activities.
+- Implement endpoints for dashboard statistics and reset operations.
+
+ 4. Set up task runner (Mage):
+
+- Define tasks for initializing the database, running migrations, and seeding data.
+
+ 5. Test the API:
+
+- Write tests to ensure all endpoints work as expected.
+- Verify the database operations and API responses.
