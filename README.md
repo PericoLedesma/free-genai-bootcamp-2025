@@ -77,7 +77,7 @@ Based on the frontend prompt requirements:
 
 - Create a new directory for the backend project.
 - Initialize a Python virtual environment.
-- Install necessary dependencies (FastAPI, SQLite, and Mage).
+- Install necessary dependencies (Flask, SQLite, and Mage).
 
  2. Define the database schema:
 

@@ -3,17 +3,16 @@
 
 # main.py
 from flask import Flask, render_template_string
-from api import words
-# from app.api.endpoints import words, groups, study_sessions, study_activities, dashboard, reset
+from api import words, groups, study_sessions, study_activities, dashboard, reset
 
 app = Flask(__name__)
 
 app.register_blueprint(words.bp, url_prefix="/api/words")
-# app.register_blueprint(groups.bp, url_prefix="/api/groups")
-# app.register_blueprint(study_sessions.bp, url_prefix="/api/study_sessions")
-# app.register_blueprint(study_activities.bp, url_prefix="/api/study_activities")
-# app.register_blueprint(dashboard.bp, url_prefix="/api/dashboard")
-# app.register_blueprint(reset.bp, url_prefix="/api/reset")
+app.register_blueprint(groups.bp, url_prefix="/api/groups")
+app.register_blueprint(study_sessions.bp, url_prefix="/api/study_sessions")
+app.register_blueprint(study_activities.bp, url_prefix="/api/study_activities")
+app.register_blueprint(dashboard.bp, url_prefix="/api/dashboard")
+app.register_blueprint(reset.bp, url_prefix="/api/reset")
 
 
 
@@ -36,7 +35,7 @@ def home():
     <body>
         <div class="container">
             <h1>🚀 Flask Backend Running</h1>
-            <p>Backend is up and running!</p>
+            <p>Backend is up and running!</p>     
         </div>
     </body>
     </html>

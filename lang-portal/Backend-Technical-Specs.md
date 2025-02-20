@@ -19,67 +19,7 @@ A language learning school wants to build a prototype of learning portal which w
 
 ## Directory Structure
 
-```text
-backend-flask/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── models.py
-│   ├── schemas.py
-│   ├── crud.py
-│   ├── database.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── endpoints/
-│   │   │   ├── words.py
-│   │   │   ├── groups.py
-│   │   │   ├── study_sessions.py
-│   │   │   ├── study_activities.py
-│   │   │   ├── dashboard.py
-│   │   │   ├── reset.py
-├── db/
-│   ├── migrations/
-│   │   ├── 0001_init.sql
-│   │   ├── 0002_create_words_table.sql
-│   ├── seeds/
-│   │   ├── words.json
-│   │   ├── groups.json
-├── tasks.py
-├── requirements.txt
-└── words.db
-```
 
- • `app/`: Contains the main application code.
-
-  - `main.py`: The entry point of the application.
-  - `models.py`: Defines the database models.
-  - `schemas.py`: Defines the data schemas for request and response validation.
-  - `crud.py`: Contains the CRUD (Create, Read, Update, Delete) operations.
-  - `database.py`: Manages the database connection and setup.
-  - `api/`: Contains the API endpoints.
-    - `__init__.py`: Initializes the API module.
-    - `endpoints/`: Contains individual endpoint definitions.
-      - `words.py`: Endpoints for managing words.
-      - `groups.py`: Endpoints for managing groups.
-      - `study_sessions.py`: Endpoints for managing study sessions.
-      - `study_activities.py`: Endpoints for managing study activities.
-      - `dashboard.py`: Endpoints for dashboard statistics.
-      - `reset.py`: Endpoints for reset operations.
-
- • `db/`: Contains database-related files.
-
-  - `migrations/`: SQL files for database migrations.
-    - `0001_init.sql`: Initial migration script.
-    - `0002_create_words_table.sql`: Script to create the words table.
-  - `seeds/`: JSON files for seeding the database with initial data.
-    - `words.json`: Seed data for words.
-    - `groups.json`: Seed data for groups.
-
- • `tasks.py`: Contains task definitions for initializing, migrating, and seeding the database.
-
- • `requirements.txt`: Lists the dependencies required for the project.
-
- • `words.db`: The SQLite database file.
 
 ------ 
 ## Database Schema
