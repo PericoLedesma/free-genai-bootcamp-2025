@@ -11,7 +11,7 @@ A language learning school wants to build a prototype of learning portal which w
 
 - The backend will be built using python
 - The database will be SQLite3
-- The API will be built using FastAPI
+- The API will be built using Flask
 - Mage is a task runner for python
 - The API will always return JSON
 - There will no authentication or authorization
@@ -20,8 +20,9 @@ A language learning school wants to build a prototype of learning portal which w
 ## Directory Structure
 
 ```text
-backend_python/
+backend-flask/
 ├── app/
+│   ├── __init__.py
 │   ├── main.py
 │   ├── models.py
 │   ├── schemas.py
@@ -40,11 +41,9 @@ backend_python/
 │   ├── migrations/
 │   │   ├── 0001_init.sql
 │   │   ├── 0002_create_words_table.sql
-│   │   ├── ...
 │   ├── seeds/
 │   │   ├── words.json
 │   │   ├── groups.json
-│   │   ├── ...
 ├── tasks.py
 ├── requirements.txt
 └── words.db
