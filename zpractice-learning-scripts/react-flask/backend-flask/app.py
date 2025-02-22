@@ -5,7 +5,7 @@ import sqlite3
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend-react requests
-
+print("Flask app created successfully on : ", app.url_map)
 database_path = "SQlite/test_DB.db"
 
 def get_db_connection():
