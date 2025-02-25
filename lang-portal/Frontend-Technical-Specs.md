@@ -1,5 +1,35 @@
 # Frontend Technical Spec
 
+We would like to build a German language learning web app.
+Role/Profession
+Frontend Developer
+Project Description
+Project Brief
+We are building a German language learning web-app which serves the following purposes:
+- A portal to launch study activities
+- to store, group and explore german vocabulary
+- to review study progress
+The web-app is intended for desktop only, so we don't have to be concerned with mobile layouts.
+Technical Requirements
+- React.js as the frontend library
+- Tailwind CSS as the css framework
+- Vite.js as the local development server
+- Typescript for the programming language 
+- ShadCN for components
+
+Global Components
+Navigation
+There will be a horizontal navigation bar with the following links;
+- Study Activities
+- Wordsl
+- Word Groups
+- Sessions
+- Settings
+The default route / should forward to /dashboard
+
+Frontend Routes
+This is a list of routes for our web-app we are building Each of these routes are a page and we'll describe them in more details under the pages heading.
+
 ## Pages
 
 ### Dashboard `/dashboard`
