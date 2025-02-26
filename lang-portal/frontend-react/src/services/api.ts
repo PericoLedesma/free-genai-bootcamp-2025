@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 // Group types
 export interface Group {
@@ -75,6 +75,15 @@ export interface StudyStats {
   total_sessions: number;
   active_groups: number;
   current_streak: number;
+}
+
+// Add interface for LastStudySession
+export interface LastStudySession {
+  id: number;
+  group_id: number;
+  study_activity_id: number;
+  created_at: string;
+  group_name: string;
 }
 
 // Group API
@@ -247,9 +256,21 @@ export const fetchRecentStudySession = async (): Promise<RecentSession | null> =
 };
 
 export const fetchStudyStats = async (): Promise<StudyStats> => {
-  const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+  // const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
+  const response = await fetch(`${API_BASE_URL}/api/message`);
   if (!response.ok) {
     throw new Error('Failed to fetch study stats');
+  }else{
+    console.log("HERE. response is ok")
   }
   return response.json();
 };
+
+// Function to fetch the last study session details
+export async function getLastStudySession(): Promise<LastStudySession> {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/dashboard/last_study_session`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch last study session");
+  }
+  return response.json();
+}

@@ -37,6 +37,7 @@ def get_words():
 
 @app.route('/api/message', methods=['GET'])
 def get_message():
+    print("Sending message: Hello from backend Flask!")
     return jsonify({"message": "Hello from backend Flask!"})
 
 # Registering the Blueprint with a URL prefix

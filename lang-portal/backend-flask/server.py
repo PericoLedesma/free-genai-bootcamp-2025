@@ -29,7 +29,7 @@ from db.database import *
 
 # Parameters:
 HOST = "0.0.0.0"
-PORT = 8081
+PORT = 8000
 
 DATABASE_NAME = "test_DB.db"
 DATABASE_PATH = os.path.join(".", "db", DATABASE_NAME)
@@ -59,8 +59,8 @@ def create_app() -> Flask:
 
     # app.register_error_handler(Exception, error_handler) # Register a global error handler (to catch exceptions and return JSON errors) todo
 
-    conn = bootstrap_db(DATABASE_PATH, log)
-    create_tables(conn, log)
+    # conn = bootstrap_db(DATABASE_PATH, log)
+    # create_tables(conn, log)
     # add_values(conn, log)
 
 

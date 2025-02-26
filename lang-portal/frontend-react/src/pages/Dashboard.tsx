@@ -31,7 +31,7 @@ export default function Dashboard() {
     const loadDashboardData = async () => {
       try {
         const [sessionData, statsData] = await Promise.all([
-          fetchRecentStudySession(),
+          'HEYYYYY', //fetchRecentStudySession(''),
           fetchStudyStats()
         ])
         setRecentSession(sessionData)
@@ -61,7 +61,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Last Study Session */}
-        <DashboardCard title="Last Study Session" icon={Clock}>
+        <DashboardCard title="Last Study Session HEEEERE" icon={Clock}>
           {isLoading ? (
             <div className="animate-pulse h-20 bg-gray-200 dark:bg-gray-700 rounded" />
           ) : recentSession ? (
@@ -73,7 +73,8 @@ export default function Dashboard() {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   <span className="text-green-500">✓</span>
-                  <span>{recentSession.correct_count} correct</span>
+                  {/*<span>{recentSession.correct_count} correct</span>*/}
+                  <span>{"HEEEEEEEY"} correct</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-red-500">✗</span>
