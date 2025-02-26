@@ -1,5 +1,4 @@
-
-from flask import Blueprint, render_template_string
+from flask import Blueprint, render_template_string, jsonify
 
 bp = Blueprint("main", __name__)
 
@@ -26,3 +25,8 @@ def home():
     </body>
     </html>
     """)
+
+@bp.route('/api/message', methods=['GET'])
+def get_message():
+    print("Sending message: Hello from backend Flask!")
+    return jsonify({"message": "api/message: Hello from backend Flask!"})

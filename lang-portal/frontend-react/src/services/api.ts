@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // Group types
 export interface Group {
@@ -256,10 +257,9 @@ export const fetchRecentStudySession = async (): Promise<RecentSession | null> =
 };
 
 export const fetchStudyStats = async (): Promise<StudyStats> => {
-  // const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
-  const response = await fetch(`${API_BASE_URL}/api/message`);
+  const response = await fetch(`${API_BASE_URL}/dashboard/stats`);
   if (!response.ok) {
-    throw new Error('Failed to fetch study stats');
+    throw new Error('fetchStudy: Stats Failed to fetch study stats');
   }else{
     console.log("HERE. response is ok")
   }
