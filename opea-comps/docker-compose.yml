@@ -1,0 +1,33 @@
+# Copyright (C) 2024 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+# ===================================================================================================
+#This Docker Compose  defines a service ollama-server using the ollama/ollama image.
+#- Service Definition:
+#The service is named ollama-server and will run in a container with the same name.
+#- Ports:
+#The container’s internal port 11434 is mapped to a host port defined by the environment variable LLM_ENDPOINT_PORT. If LLM_ENDPOINT_PORT isn’t set, it defaults to 8008.
+#- Environment Variables:
+#The container inherits proxy settings (no_proxy, http_proxy, https_proxy) and configuration variables like LLM_MODEL_ID and host_ip from the host environment.
+#- Network Configuration:
+#The service runs on the default Docker network, which uses the bridge driver.
+#
+#This setup allows you to configure the container behavior dynamically via environment variables while ensuring that the necessary ports and network settings are in place.
+# ===================================================================================================
+
+services:
+  ollama-server:
+    image: ollama/ollama
+    container_name: ollama-server
+    ports:
+      - ${LLM_ENDPOINT_PORT:-8008}:11434
+    environment:
+      no_proxy: ${no_proxy}
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+      LLM_MODEL_ID: ${LLM_MODEL_ID}
+      host_ip: ${host_ip}
+
+networks:
+  default:
+    driver: bridge
