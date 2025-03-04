@@ -19,6 +19,46 @@ A language learning school wants to build a prototype of learning portal which w
 
 ## Directory Structure
 
+backend-flask/
+├── api/
+│   ├── __init__.py
+│   ├── groups.py
+│   ├── words.py
+│   ├── study_sessions.py
+│   ├── dashboard.py
+├── models/
+│   ├── __init__.py
+│   ├── word.py
+│   ├── group.py
+│   ├── study_session.py
+│   ├── study_activity.py
+│   ├── word_review.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_groups.py
+│   ├── test_words.py
+│   ├── test_study_sessions.py
+│   ├── test_dashboard.py
+├── __init__.py
+├── app.py
+├── config.py
+├── database.py
+├── tasks.py
+├── requirements.txt
+├── README.md
+
+`backend-flask/`
+- `api/`: Contains the API route definitions for each page
+- `db/`: Contains all the scripts related to the SQLite3 database
+- `services/`: the api scripts direct to this services
+- `server.py`: The main application file that sets up the Flask app.
+- `models.py`: Contains configuration settings for the application.
+
+Possible scripts...
+- `database.py`: Handles database connections and operations.
+- `tasks.py`: Defines tasks for automation and maintenance.
+- `requirements.txt`: Lists the dependencies required for the project.
+- `README.md`: Provides an overview and documentation for the project.
 
 
 ------ 
