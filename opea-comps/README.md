@@ -39,38 +39,13 @@ https://github.com/ollama/ollama/blob/main/docs/api.md
 }'
 ```
 
-- Generate request to the llm container
+- Generate request to the **llm container**
 ```bash
     curl http://127.0.0.1:9000/api/generate -d '{
       "model": "llama3.2:1B",
       "prompt": "Why is the sky blue?"
     }'
 ```
-
--  Generate request to the megaservice
-```bash
-    curl http://0.0.0.0:8000/v1/example-service -d '{
-      "model": "llama3.2:1B",
-      "prompt": "Why is the sky blue?"
-    }'
-```
-
--  Generate request to the megaservice
-```bash
-    curl http://0.0.0.0:8000/v1/health_check 
-    curl http://0.0.0.0:8000/health
-    curl http://0.0.0.0:8000/v1/statistics
-
-```
-
-```bash
-curl -X POST http://localhost:8000/v1/example-service \
-     -H "Content-Type: application/json" \
-     -d '{
-          "messages": "Hello, this is a test message"
-     }'
-```
-
 
 # Technical Uncertainty
 Q Does bridge mode mean we can only accses Ollama API with another model in the docker compose?
