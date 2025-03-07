@@ -6,6 +6,10 @@ All the microservices are containerized, allowing cloud native deployment.
 https://opea-project.github.io/latest/GenAIComps/README.html
 https://github.com/opea-project/GenAIComps
 
+Docker compose file from: https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/ollama/deployment/docker_compose/compose.yaml
+
+
+**The idea is to have a container that runs the LLM and may be other containers with other services. The mega-service will be the orchestrator that will manage the services.**
 
 ## Mega-service 
 Service orchestration framework using MicroService and ServiceOrchestrator, which are imported from comps.

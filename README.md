@@ -52,6 +52,7 @@ Currently, the platform serves **300 active students**, all of whom are located 
 - **Flask-CORS** for handling Cross-Origin Resource Sharing
 - **Invoke** for task running/automation
 - **Pytest** for testing
+- **ChromaDB** for storing and managing data for knowledge base
 
 #### - Frontend (React App)
 
@@ -62,6 +63,7 @@ Based on the frontend prompt requirements:
 - **Tailwind CSS** for styling
 - **Vite.js** as the development server/bundler
 - **ShadCN** for UI components
+
 
 
 ----- 
@@ -97,3 +99,23 @@ Based on the frontend prompt requirements:
 
 - Write tests to ensure all endpoints work as expected.
 - Verify the database operations and API responses.
+
+
+
+
+## AI coding tools
+
+- Replit – Build apps and sites with AI https://replit.com
+    Your own automated app developer · Start with a prompt. Prompt Replit Agent by describing the app or site you want to create.
+- Vercel - https://vercel.com/
+    Develop. Preview. Ship. For the best frontend teams – Vercel is the optimal workflow for frontend teams. All-in-one: Static and Jamstack deployment, Serverless Functions, and Global CDN.
+
+## Other tools
+-  Firecraker - https://firecracker-microvm.github.io/
+Firecracker is an open-source virtualization technology that is purpose-built for creating and managing secure, multi-tenant container and function-based services that provide serverless operational models. Firecracker runs workloads in lightweight virtual machines, called microVMs, which combine the security and isolation properties provided by hardware virtualization technology with the speed and flexibility of containers.
+
+-  CodeSandbox - https://codesandbox.io/
+- 
+
+
+

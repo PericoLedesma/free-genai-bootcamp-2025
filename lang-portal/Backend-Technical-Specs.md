@@ -16,6 +16,7 @@ A language learning school wants to build a prototype of learning portal which w
 - The API will always return JSON
 - There will no authentication or authorization
 - Everything be treated as a single user
+- To store the vector data we will use ChromaDB
 
 ## Directory Structure
 
