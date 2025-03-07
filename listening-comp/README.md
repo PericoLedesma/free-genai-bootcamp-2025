@@ -18,6 +18,9 @@ Pull the youtube content, and use that to generate out similar style listening c
 - Frontend eg. Streamlit.
 - Guardrails
 
+
+
+------------------
 ## Technical Uncertainty:
 - Don’t know Japanese!
 - Accessing or storing documents as vector store with Sqlite3
