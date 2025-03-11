@@ -28,7 +28,7 @@ from db.database import *
 
 
 # Parameters:
-HOST = "0.0.0.0"
+HOST = "127.0.0.1"
 PORT = 8000
 
 DATABASE_NAME = "test_DB.db"
