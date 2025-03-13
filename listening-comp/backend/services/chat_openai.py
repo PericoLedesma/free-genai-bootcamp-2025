@@ -4,50 +4,59 @@ import requests
 import openai
 from openai import OpenAI
 
+def stream_chat(prompt: str, model: str = "gpt-4o") -> str:
+    client = OpenAI()
+
+    stream = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            },
+        ],
+        stream=True,
+    )
+    # Content print(chunk.choices[0].delta.content)
+    # Finish with print(chunk.finish_reason) = stop else None
+    for chunk in stream:
+        print(chunk.choices[0].delta.content)
 
 
 
-class OpenAIService:
-    def __init__(self):
-        self.client = OpenAI()
+def chat(prompt: str, model: str = "gpt-4o") -> str:
 
-    def chat(self,
-             prompt: str,
-             model: str = "gpt-4o") -> str:
+    client = OpenAI()
 
-        # headers = {
-        #     "Content-Type": "application/json",
-        #     "x-api-key": self.api_key
-        # }
+    # headers = {
+    #     "Content-Type": "application/json",
+    #     "x-api-key": self.api_key
+    # }
 
-        data = {
-            "model": model,
-            "prompt": prompt,
-            "max_tokens_to_sample": 300
-        }
+    data = {
+        "model": model,
+        "prompt": prompt,
+        "max_tokens_to_sample": 300
+    }
 
-        completion = self.client.chat.completions.create(
-            model=model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
+    completion = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
 
-        print(completion.choices[0].message.content)
-        # if completion.status_code == 200:
-        #     result = completion.choices[0].message.content
-        #     return result.get("completion", "No completion returned")
-        # else:
-        #     return f"Error: {response.status_code} {response.text}"
+
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content
 
 
 
 
 if __name__ == '__main__':
-    service = OpenAIService()
-    service.chat("Hello")
-
+    # chat("Hello")
+    stream_chat()
 

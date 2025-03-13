@@ -11,6 +11,9 @@ router = APIRouter()
 # Chat with Claude endpoint
 @router.post("/chat")
 async def chat_with_claude(request: ChatRequest):
+
+    return {"response": reply}
+
     try:
         req_data = request.get_json()
         if not req_data or "prompt" not in req_data:

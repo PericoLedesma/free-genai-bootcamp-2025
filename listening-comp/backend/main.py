@@ -22,7 +22,6 @@ async def read_root():
     return {"message": "Welcome to the German Learning Assistant API"}
 
 if __name__ == '__main__':
-
     print("Running the server at http://")
     uvicorn.run(app,
                 host=HOST,
