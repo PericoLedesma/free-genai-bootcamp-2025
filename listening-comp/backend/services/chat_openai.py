@@ -4,9 +4,10 @@ import requests
 import openai
 from openai import OpenAI
 
-def stream_chat(prompt: str, model: str = "gpt-4o") -> str:
-    client = OpenAI()
+def stream_chat(prompt: str,
+                model: str = "gpt-4o") -> str:
 
+    client = OpenAI()
     stream = client.chat.completions.create(
         model=model,
         messages=[
@@ -25,19 +26,11 @@ def stream_chat(prompt: str, model: str = "gpt-4o") -> str:
 
 
 def chat(prompt: str, model: str = "gpt-4o") -> str:
-
     client = OpenAI()
-
     # headers = {
     #     "Content-Type": "application/json",
     #     "x-api-key": self.api_key
     # }
-
-    data = {
-        "model": model,
-        "prompt": prompt,
-        "max_tokens_to_sample": 300
-    }
 
     completion = client.chat.completions.create(
         model=model,
@@ -48,7 +41,6 @@ def chat(prompt: str, model: str = "gpt-4o") -> str:
             }
         ]
     )
-
 
     print(completion.choices[0].message.content)
     return completion.choices[0].message.content

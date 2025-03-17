@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 # Define data models for incoming requests
 class ChatRequest(BaseModel):
-    model: str = "ChatGPT"  # Default value if not provided
-    message: str
+    model: str = "gpt-4o"  # Default value if not provided
+    prompt: str
 
 class GrammarRequest(BaseModel):
     sentence: str
