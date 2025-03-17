@@ -1,9 +1,7 @@
-from fastapi import FastAPI, HTTPException
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 # from services.chat_claude import *
 from services.chat_openai import chat
-
 from models import ChatRequest
 
 chat_router = APIRouter()
@@ -15,8 +13,6 @@ curl -X POST \
   http://127.0.0.1:8080/chatopenai/
 
 '''
-
-
 
 @chat_router.post("/chatopenai/")
 # async def chat_with_claude(request: ChatRequest):
@@ -34,23 +30,3 @@ async def chat_with_openai(request: ChatRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-# Endpoint: http://127.0.0.1:8080/greet/John
-@chat_router.get("/greet/{name}")
-async def greet(name: str):
-    if not name:
-        return {"message": "Hello, to you!"}
-    else:
-        return {"message": f" Hi {name}"}
-
-
-# # Chat with Claude endpoint
-# @router.post("/chat")
-# async def chat_with_claude(request: ChatRequest):
-#     try:
-#         # Here you would normally call your LLM client.
-#         # For demonstration, we'll just echo the message.
-#         reply = f"Claude received: {request.message}"
-#         return {"response": reply}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))

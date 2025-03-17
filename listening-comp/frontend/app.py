@@ -1,6 +1,13 @@
 import streamlit as st
+import requests  # Import the requests library
 
-# Optional: Configure the page
+BACKEND_URL = "http://127.0.0.1:8080"  # URL of the backend server
+
+git
+commit - m
+"Listening proyect: frontend connected"
+
+# Page configuration
 st.set_page_config(
     page_title="German Learning Assistant",
     layout="wide",
@@ -27,10 +34,19 @@ def main():
         st.subheader("Chat Interface")
         st.write("Here you could implement a chat interface with Claude.")
         user_input = st.text_input("Type your message here:")
+
+        # When the user clicks the Send button, make the API call
         if st.button("Send"):
             st.write(f"You asked Claude: {user_input}")
-            # Placeholder for Claude's response
-            st.write("Claude's response goes here.")
+            # Prepare the payload based on the curl command
+            payload = {"model": "gpt-4o", "prompt": user_input}
+            try:
+                response = requests.post(f"{BACKEND_URL}/chatopenai/", json=payload)
+                response.raise_for_status()  # Raise an error for bad responses
+                chat_response = response.json()  # Assume the API returns a JSON response
+                st.write("ChatGPT response:", chat_response)
+            except Exception as e:
+                st.error("Failed to get a response from the chat endpoint: " + str(e))
 
     elif option == "Basic LLM Capabilities":
         # Page Title
@@ -76,7 +92,6 @@ def main():
             st.write(f"Problem: {reasoning_prompt}")
             # Placeholder reasoning output
             st.warning("Reasoning steps or final answer go here.")
-
 
 if __name__ == "__main__":
     main()

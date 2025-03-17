@@ -1,10 +1,3 @@
-'''
-
-Root url: http://127.0.0.1:8080
-Endpoints: http://127.0.0.1:8080/chat
-http://127.0.0.1:8080/great
-'''
-
 import uvicorn
 from fastapi import FastAPI
 from api.chat import chat_router
@@ -24,7 +17,7 @@ app.include_router(chat_router)
 # app.include_router(alignment.router, prefix="/alignment", tags=["Alignment"])
 # app.include_router(reasoning.router, prefix="/reasoning", tags=["Reasoning"])
 
-# Root endpoint for testing
+# Root endpoint for testing:  http://127.0.0.1:8080
 @app.get("/")
 async def read_root():
     return {"message": "Welcome to the German Learning Assistant API"}
