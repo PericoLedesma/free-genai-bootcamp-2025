@@ -8,12 +8,16 @@ st.set_page_config(
     page_title="German Learning Assistant",
     layout="wide",
 )
+chat_service = st.sidebar.radio(
+    "Select Chat Service",
+    ("OpenAI", "AWS Bedrock")
+)
 
 # --- SIDEBAR NAVIGATION ---
 option = st.sidebar.radio(
     "Navigation",
     (
-        "Chat with Claude",
+        "Chat with Assistant",
         "Basic LLM Capabilities",
         "Agent-Based Alignment Generation",
         "Agent-Based Reasoning Systems",
@@ -22,25 +26,28 @@ option = st.sidebar.radio(
 
 def main():
     # --- MAIN PAGE CONTENT ---
-    if option == "Chat with Claude":
+    if option == "Chat with Assistant":
         # Page Title
-        st.title("Chat with Claude")
+        st.title("Chat with Assistant")
 
-        # Example layout for Chat with Claude
+        # Example layout for Chat with Assistant
         st.subheader("Chat Interface")
-        st.write("Here you could implement a chat interface with Claude.")
+        st.write("Here you could implement a chat interface with the Assistant.")
         user_input = st.text_input("Type your message here:")
 
         # When the user clicks the Send button, make the API call
         if st.button("Send"):
-            st.write(f"You asked Claude: {user_input}")
-            # Prepare the payload based on the curl command
+            st.write(f"You asked the Assistant: {user_input}")
             payload = {"model": "gpt-4o", "prompt": user_input}
             try:
-                response = requests.post(f"{BACKEND_URL}/chatopenai/", json=payload)
+                if chat_service == "OpenAI":
+                    endpoint = f"{BACKEND_URL}/chatopenai/"
+                else:  # AWS Bedrock
+                    endpoint = f"{BACKEND_URL}/chatbedrock/"
+                response = requests.post(endpoint, json=payload)
                 response.raise_for_status()  # Raise an error for bad responses
                 chat_response = response.json()  # Assume the API returns a JSON response
-                st.write("ChatGPT response:", chat_response)
+                st.write(f"{chat_service} response:", chat_response)
             except Exception as e:
                 st.error("Failed to get a response from the chat endpoint: " + str(e))
 

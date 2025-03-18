@@ -1,12 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from services.chat_AWS import AWSBedrockClient
-
-# from services.chat_claude import *
-from services.chat_openai import chat_openai
 from models import ChatRequest
 
-chat_router = APIRouter()
+# from services.chat_claude import *
+from services.chat_AWS import AWSBedrockClient
+from services.chat_openai import ChatOpenAI
 
+chat_router = APIRouter()
+openai_client = ChatOpenAI()
+bedrock_client = AWSBedrockClient()
+
+
+# ------------------ OPENAI CHAT ------------------ #
 ''' Chat endpoint:
 curl -X POST \
   -H "Content-Type: application/json" \
@@ -14,7 +18,6 @@ curl -X POST \
   http://127.0.0.1:8080/chatopenai/
 
 '''
-
 @chat_router.post("/chatopenai/")
 async def chat_with_openai(request: ChatRequest):
     try:
@@ -24,14 +27,14 @@ async def chat_with_openai(request: ChatRequest):
 
         prompt = request.prompt
         # return {"response": "Prompt: " + prompt}
-        return {"response": chat_openai(request.prompt, request.model)}
+        return {"response": openai_client.chat(request.prompt, request.model)}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# New endpoint to talk to AWS Bedrock service
-bedrock_client = AWSBedrockClient()
 
+
+# ------------------ BEDROCK CHAT ------------------ #
 
 '''
 curl -X POST \

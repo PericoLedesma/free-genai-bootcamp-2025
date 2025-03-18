@@ -4,51 +4,100 @@ import requests
 import openai
 from openai import OpenAI
 
-def stream_chat_openai(prompt: str,
-                model: str = "gpt-4o") -> str:
 
-    client = OpenAI()
-    stream = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            },
-        ],
-        stream=True,
-    )
-    # Content print(chunk.choices[0].delta.content)
-    # Finish with print(chunk.finish_reason) = stop else None
-    for chunk in stream:
-        print(chunk.choices[0].delta.content)
+class ChatOpenAI:
+    def __init__(self, model: str = "gpt-4o"):
+        self.model = model
+        self.client = OpenAI()
+        self.conversation = []  # This list will hold the conversation history
 
+    def chat(self, prompt: str) -> str:
+        # Add the user's message to the conversation history
 
+        self.conversation.append({"role": "user", "content": prompt})
 
-def chat_openai(prompt: str, model: str = "gpt-4o") -> str:
-    client = OpenAI()
-    # headers = {
-    #     "Content-Type": "application/json",
-    #     "x-api-key": self.api_key
-    # }
+        # Send the entire conversation to the API
+        completion = self.client.chat.completions.create(
+            model=self.model,
+            messages=self.conversation
+        )
+        response = completion.choices[0].message.content
+        print(response)
 
-    completion = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+        # Add the assistant's response to the conversation history
+        self.conversation.append({"role": "assistant", "content": response})
+        return response
 
-    print(completion.choices[0].message.content)
-    return completion.choices[0].message.content
+    def stream_chat(self, prompt: str) -> None:
+        self.conversation.append({"role": "user", "content": prompt})
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=self.conversation,
+            stream=True
+        )
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            print(content, end="", flush=True)
+        print()  # New line after streaming completes
+
+        # (Optional) If you want to capture the full response in the conversation history,
+        # you'll need to aggregate the streamed chunks into one complete response.
 
 
+import os
+import requests
 
- # -----------------------------------------------------------
+import openai
+from openai import OpenAI
+
+
+class ChatOpenAI:
+    def __init__(self):
+        self.client = OpenAI()
+        self.conversation = []  # This list will hold the conversation history
+
+    def chat(self, prompt: str, model: str = "gpt-4o") -> str:
+        # Add the user's message to the conversation history
+
+        self.conversation.append({"role": "user", "content": prompt})
+
+        # Send the entire conversation to the API
+        completion = self.client.chat.completions.create(
+            model=model,
+            messages=self.conversation
+        )
+        response = completion.choices[0].message.content
+        print(response)
+
+        # Add the assistant's response to the conversation history
+        self.conversation.append({"role": "assistant", "content": response})
+        return response
+
+    def stream_chat(self, prompt: str, model: str = "gpt-4o") -> None:
+        self.conversation.append({"role": "user", "content": prompt})
+        stream = self.client.chat.completions.create(
+            model=model,
+            messages=self.conversation,
+            stream=True
+        )
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            print(content, end="", flush=True)
+        print()  # New line after streaming completes
+
+        # (Optional) If you want to capture the full response in the conversation history,
+        # you'll need to aggregate the streamed chunks into one complete response.
+
+    def print_conversation(self) -> None:
+        """Prints the entire conversation history."""
+        for msg in self.conversation:
+            print(f"{msg['role']}: {msg['content']}")
+
+
 if __name__ == '__main__':
-    # chat("Hello")
-    stream_chat()
+    chat_instance = ChatOpenAI()
+    # Example usage: Regular chat
+    chat_instance.chat("Hello, how are you?")
 
+    # Uncomment the following line to test streaming chat
+    # chat_instance.stream_chat("Tell me a story.")

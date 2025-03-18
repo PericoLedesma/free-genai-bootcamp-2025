@@ -22,6 +22,10 @@ app.include_router(chat_router)
 async def read_root():
     return {"message": "Welcome to the German Learning Assistant API"}
 
+@app.on_event("startup") # This event is triggered when the server starts
+async def startup_event():
+    app.state.my_client = "AWSBedrockClient() "
+
 
 if __name__ == '__main__':
     print("Running the server at http://")
