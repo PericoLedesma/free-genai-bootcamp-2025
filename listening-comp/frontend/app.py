@@ -3,10 +3,6 @@ import requests  # Import the requests library
 
 BACKEND_URL = "http://127.0.0.1:8080"  # URL of the backend server
 
-git
-commit - m
-"Listening proyect: frontend connected"
-
 # Page configuration
 st.set_page_config(
     page_title="German Learning Assistant",

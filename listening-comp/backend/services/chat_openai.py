@@ -4,7 +4,7 @@ import requests
 import openai
 from openai import OpenAI
 
-def stream_chat(prompt: str,
+def stream_chat_openai(prompt: str,
                 model: str = "gpt-4o") -> str:
 
     client = OpenAI()
@@ -25,7 +25,7 @@ def stream_chat(prompt: str,
 
 
 
-def chat(prompt: str, model: str = "gpt-4o") -> str:
+def chat_openai(prompt: str, model: str = "gpt-4o") -> str:
     client = OpenAI()
     # headers = {
     #     "Content-Type": "application/json",

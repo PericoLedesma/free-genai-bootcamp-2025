@@ -29,5 +29,5 @@ Pull the youtube content, and use that to generate out similar style listening c
 - Can you pull transcripts for the target videos?
 
 
-![img.png](images/img.png)
-![img_1.png](images/img_1.png)
+![img.png](images/02_Raw transcript.png)
+![img_1.png](images/01_chat.png)
