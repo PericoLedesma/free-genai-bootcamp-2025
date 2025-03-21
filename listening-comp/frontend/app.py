@@ -18,7 +18,7 @@ option = st.sidebar.radio(
     "Navigation",
     (
         "Chat with Assistant",
-        "Basic LLM Capabilities",
+        "German Learning Assistant",
         "Agent-Based Alignment Generation",
         "Agent-Based Reasoning Systems",
     ),
@@ -43,9 +43,17 @@ def chat_llm(user_input):
     except Exception as e:
         st.error("Failed to get a response from the chat endpoint: " + str(e))
 
+def get_transcript(url):
+    try:
+        response = requests.post(f"{BACKEND_URL}/transcript/", json={"url": url})
+        response.raise_for_status()  # Raise an error for bad responses
+        transcript = response.json()  # Assume the API returns a JSON response
+        return transcript["transcript"]
+    except Exception as e:
+        st.error("Failed to get a response from the transcript endpoint: " + str(e))
+
 
 def main():
-    # Initialize conversation history in session state
     if 'conversation_history' not in st.session_state:
         st.session_state.conversation_history = []
 
@@ -55,13 +63,10 @@ def main():
         st.markdown("---")
         st.markdown(f"### Conversation History")
 
-        # Display chat messages from history on app rerun
         for message in st.session_state.conversation_history:
             with st.chat_message(message["role"]):
                 st.markdown(message["message"])
 
-
-        # if user_input:
         if user_input := st.chat_input("Type your message here:"):
             st.session_state.conversation_history.append({"role": "user", "message": user_input})
 
@@ -78,20 +83,35 @@ def main():
 
 
     # --------------------------- BASIC LLM CAP PAGE  --------------------------- #
-    elif option == "Basic LLM Capabilities":
-        # Page Title
-        st.title("Basic LLM Capabilities")
+    elif option == "German Learning Assistant":
+        if 'video' not in st.session_state:
+            st.session_state.video = {}
+        video_transcript = ""
+        st.title("German Learning Assistant")
+        st.write("Transform Youtube transcripts into interactive German learning experiences.")
+        st.write("This tools demostrates: \n"
+                 "- Base LLM capabilities\n "
+                 "- RAG capabilities\n "
+                 "- Amazon Bedrock capabilities\n"
+                 "- Agent-based learning systems")
 
-        # Example layout for Basic LLM Capabilities
-        st.subheader("Grammar and Vocabulary Practice")
-        st.write("Explore grammar, vocabulary, and reading comprehension tasks.")
+        st.subheader("Raw transcript Processing")
+        url = st.text_input("Youtube URL")
 
-        st.markdown("**Sample Grammar Exercise**")
-        grammar_question = st.text_input("Enter a German sentence to analyze:")
-        if st.button("Analyze Sentence"):
-            st.write(f"Analyzing grammar for: {grammar_question}")
-            # Placeholder analysis result
-            st.info("Grammar analysis results go here.")
+        if st.button("Accept"):
+            st.session_state.video = {"url": url}
+            st.info(f"Video URL: {url}")
+            video_transcript = get_transcript(url)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Raw transcript")
+            st.write(video_transcript)
+        with col2:
+            st.subheader("Transcript Stats")
+            st.write("This is some content in the second column.")
+
+
 
     elif option == "Agent-Based Alignment Generation":
         # Page Title

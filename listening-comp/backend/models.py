@@ -7,8 +7,8 @@ class ChatRequest(BaseModel):
     model: str = "gpt-4o"  # Default value if not provided
     prompt: str
 
-class GrammarRequest(BaseModel):
-    sentence: str
+class TranscriptRequest(BaseModel):
+    url: str
 
 class AlignmentRequest(BaseModel):
     scenario: str

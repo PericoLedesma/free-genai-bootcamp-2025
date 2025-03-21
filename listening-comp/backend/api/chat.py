@@ -30,7 +30,6 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"model": "gpt-4o", "prompt": "Hello chatgpt, are you there?"}' \
   http://127.0.0.1:8080/chatopenai/
-
 '''
 
 # ------------------ BEDROCK CHAT ------------------ #

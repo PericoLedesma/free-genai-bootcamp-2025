@@ -4,6 +4,7 @@ import re
 from youtube_transcript_api import YouTubeTranscriptApi
 
 DEFAULT_URL= "https://www.youtube.com/watch?v=PNTCM7cbrsc"
+#    https://www.youtube.com/watch?v=PNTCM7cbrsc
 def extract_video_id(url=DEFAULT_URL):
     """Extracts the YouTube video ID from a URL."""
     regex_patterns = [
@@ -18,7 +19,7 @@ def extract_video_id(url=DEFAULT_URL):
     return None
 
 
-def main():
+def get_transcript(url):
     if len(sys.argv) < 2:
         print(f"No YouTube URL provided. Using default URL: {DEFAULT_URL}")
         url = DEFAULT_URL
@@ -39,8 +40,9 @@ def main():
     # # Print each transcript segment
     # for segment in transcript:
     #     print(segment['text'])
-    print(transcript)
+    # print(transcript)
 
-
-if __name__ == "__main__":
-    main()
+    transcript_text = " ".join(segment['text'] for segment in transcript if segment['text'] != "[Music]")
+    print("------ Transcript Text ------")
+    # print(transcript_text)
+    return transcript_text
