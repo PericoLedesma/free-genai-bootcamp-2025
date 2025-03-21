@@ -1,5 +1,6 @@
 import streamlit as st
-import requests  # Import the requests library
+import requests
+import re
 
 BACKEND_URL = "http://127.0.0.1:8080"  # URL of the backend server
 
@@ -18,7 +19,7 @@ option = st.sidebar.radio(
     "Navigation",
     (
         "Chat with Assistant",
-        "German Learning Assistant",
+        "Raw Transcript",
         "Agent-Based Alignment Generation",
         "Agent-Based Reasoning Systems",
     ),
@@ -53,9 +54,41 @@ def get_transcript(url):
         st.error("Failed to get a response from the transcript endpoint: " + str(e))
 
 
+def get_text_stats(text: str) -> dict:
+    character_count = len(text)
+
+    # Split the text into words using default whitespace splitting
+    words = text.split()
+    word_count = len(words)
+
+    # Split the text into sentences using a regex pattern to account for common sentence terminators
+    sentences = re.split(r'[.!?]+', text.strip())
+    # Filter out any empty strings that may appear after splitting
+    sentences = [s for s in sentences if s.strip()]
+    sentence_count = len(sentences)
+
+    # Count the number of lines in the text
+    line_count = len(text.splitlines())
+
+    return {
+        "character_count": character_count,
+        "word_count": word_count,
+        "sentence_count": sentence_count,
+        "line_count": line_count
+    }
+
+
 def main():
     if 'conversation_history' not in st.session_state:
         st.session_state.conversation_history = []
+
+    if 'video' not in st.session_state:
+        st.session_state.video = {}
+        st.session_state.video["character_count"] = ""
+        st.session_state.video["word_count"] = ""
+        st.session_state.video["sentence_count"] = ""
+        st.session_state.video["line_count"] = ""
+        st.session_state.video["video_transcript"] = ""
 
     # --------------------------- CHAT PAGE  --------------------------- #
     if option == "Chat with Assistant":
@@ -83,10 +116,7 @@ def main():
 
 
     # --------------------------- BASIC LLM CAP PAGE  --------------------------- #
-    elif option == "German Learning Assistant":
-        if 'video' not in st.session_state:
-            st.session_state.video = {}
-        video_transcript = ""
+    elif option == "Raw Transcript":
         st.title("German Learning Assistant")
         st.write("Transform Youtube transcripts into interactive German learning experiences.")
         st.write("This tools demostrates: \n"
@@ -101,15 +131,31 @@ def main():
         if st.button("Accept"):
             st.session_state.video = {"url": url}
             st.info(f"Video URL: {url}")
-            video_transcript = get_transcript(url)
+            st.session_state.video = {"video_transcript": get_transcript(url)}
+            text_stats = get_text_stats(st.session_state.video["video_transcript"])
+            st.session_state.video["character_count"] = text_stats["character_count"]
+            st.session_state.video["word_count"] = text_stats["word_count"]
+            st.session_state.video["sentence_count"] = text_stats["sentence_count"]
+            st.session_state.video["line_count"] = text_stats["line_count"]
 
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Raw transcript")
-            st.write(video_transcript)
+            st.write(st.session_state.video["video_transcript"])
         with col2:
             st.subheader("Transcript Stats")
-            st.write("This is some content in the second column.")
+
+            st.write("character_count")
+            st.subheader(st.session_state.video["character_count"])
+
+            st.write("word_count")
+            st.subheader(st.session_state.video["word_count"])
+
+            st.write("sentence_count")
+            st.subheader(st.session_state.video["sentence_count"])
+
+            st.write("line_count")
+            st.subheader(st.session_state.video["line_count"])
 
 
 
