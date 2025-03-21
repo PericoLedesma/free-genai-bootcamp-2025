@@ -35,7 +35,7 @@ async def read_root():
 Each endpoint corresponds to a specific feature:
 
 - **Chat with Claude (chat.py):** Receives a message from the client, processes it (e.g., via a language model), and returns a response.
-- **Grammar Analysis (grammar.py):** Accepts a Japanese sentence and returns a grammar analysis.
+- **Grammar Analysis (grammar.py):** Accepts a german sentence and returns a grammar analysis.
 - **Agent-Based Alignment Generation (alignment.py):** Takes a scenario description and returns a generated alignment demonstration.
 - **Agent-Based Reasoning (reasoning.py):** Processes a complex problem statement and returns reasoning or step-by-step results.
 

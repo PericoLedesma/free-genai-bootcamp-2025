@@ -48,7 +48,7 @@ if __name__ == '__main__':
 # # Root endpoint to verify that the server is running
 # @app.get("/")
 # async def read_root():
-#     return {"message": "Welcome to the Japanese Learning Assistant API"}
+#     return {"message": "Welcome to the German Learning Assistant API"}
 #
 #
 # # Grammar analysis endpoint

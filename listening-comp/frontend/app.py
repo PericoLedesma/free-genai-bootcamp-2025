@@ -24,33 +24,60 @@ option = st.sidebar.radio(
     ),
 )
 
-def main():
-    # --- MAIN PAGE CONTENT ---
-    if option == "Chat with Assistant":
-        # Page Title
-        st.title("Chat with Assistant")
-
-        # Example layout for Chat with Assistant
-        st.subheader("Chat Interface")
-        st.write("Here you could implement a chat interface with the Assistant.")
-        user_input = st.text_input("Type your message here:")
-
-        # When the user clicks the Send button, make the API call
-        if st.button("Send"):
-            st.write(f"You asked the Assistant: {user_input}")
+def chat_llm(user_input):
+    try:
+        if chat_service == "OpenAI":
+            endpoint = f"{BACKEND_URL}/chatopenai/"
             payload = {"model": "gpt-4o", "prompt": user_input}
-            try:
-                if chat_service == "OpenAI":
-                    endpoint = f"{BACKEND_URL}/chatopenai/"
-                else:  # AWS Bedrock
-                    endpoint = f"{BACKEND_URL}/chatbedrock/"
-                response = requests.post(endpoint, json=payload)
-                response.raise_for_status()  # Raise an error for bad responses
-                chat_response = response.json()  # Assume the API returns a JSON response
-                st.write(f"{chat_service} response:", chat_response)
-            except Exception as e:
-                st.error("Failed to get a response from the chat endpoint: " + str(e))
+        else:  # AWS Bedrock
+            endpoint = f"{BACKEND_URL}/chatbedrock/"
+            payload = {"model": "gpt-4o", "prompt": user_input} #todo bedrock model
 
+        response = requests.post(endpoint, json=payload)
+        response.raise_for_status()  # Raise an error for bad responses
+        chat_response = response.json()  # Assume the API returns a JSON response
+
+        assistant_message = chat_response.get("response", "")
+
+        return assistant_message
+    except Exception as e:
+        st.error("Failed to get a response from the chat endpoint: " + str(e))
+
+
+def main():
+    # Initialize conversation history in session state
+    if 'conversation_history' not in st.session_state:
+        st.session_state.conversation_history = []
+
+    # --------------------------- CHAT PAGE  --------------------------- #
+    if option == "Chat with Assistant":
+        st.title("Chat with Assistant")
+        st.markdown("---")
+        st.markdown(f"### Conversation History")
+
+        # Display chat messages from history on app rerun
+        for message in st.session_state.conversation_history:
+            with st.chat_message(message["role"]):
+                st.markdown(message["message"])
+
+
+        # if user_input:
+        if user_input := st.chat_input("Type your message here:"):
+            st.session_state.conversation_history.append({"role": "user", "message": user_input})
+
+            with st.chat_message("user"):
+                st.markdown(user_input)
+
+            with st.chat_message("assistant"):
+                # response = st.write_stream(chat_llm(user_input)) # todo streaming
+                response = st.write(chat_llm(user_input))
+
+            assistant_message = chat_llm(user_input)
+            st.session_state.conversation_history.append({"role": "assistant", "message": assistant_message})
+
+
+
+    # --------------------------- BASIC LLM CAP PAGE  --------------------------- #
     elif option == "Basic LLM Capabilities":
         # Page Title
         st.title("Basic LLM Capabilities")
@@ -60,7 +87,7 @@ def main():
         st.write("Explore grammar, vocabulary, and reading comprehension tasks.")
 
         st.markdown("**Sample Grammar Exercise**")
-        grammar_question = st.text_input("Enter a Japanese sentence to analyze:")
+        grammar_question = st.text_input("Enter a German sentence to analyze:")
         if st.button("Analyze Sentence"):
             st.write(f"Analyzing grammar for: {grammar_question}")
             # Placeholder analysis result

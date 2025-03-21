@@ -60,7 +60,7 @@ export default function WordShow() {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div className="p-6 space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Japanese</h2>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">German</h2>
             <p className="mt-1 text-3xl text-gray-600 dark:text-gray-300">{word.kanji}</p>
           </div>
 
