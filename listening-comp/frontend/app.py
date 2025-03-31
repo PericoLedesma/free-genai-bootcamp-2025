@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import re
 
+from sidebar import render_sidebar
+
 BACKEND_URL = "http://127.0.0.1:8080"  # URL of the backend server
 
 # Page configuration
@@ -14,16 +16,16 @@ chat_service = st.sidebar.radio(
     ("OpenAI", "AWS Bedrock")
 )
 
-# --- SIDEBAR NAVIGATION ---
-option = st.sidebar.radio(
-    "Navigation",
-    (
-        "Chat with Assistant",
-        "Raw Transcript",
-        "Agent-Based Alignment Generation",
-        "Agent-Based Reasoning Systems",
-    ),
-)
+# # --- SIDEBAR NAVIGATION ---
+# option = st.sidebar.radio(
+#     "Navigation",
+#     (
+#         "Chat with Assistant",
+#         "Raw Transcript",
+#         "Agent-Based Alignment Generation",
+#         "Agent-Based Reasoning Systems",
+#     ),
+# )
 
 def chat_llm(user_input):
     try:
@@ -78,7 +80,37 @@ def get_text_stats(text: str) -> dict:
     }
 
 
+
+
+
+def render_header():
+    """Render the header section"""
+    st.title(" German Learning Assistant")
+    st.markdown("""
+    Transform YouTube transcripts into interactive Japanese learning experiences.
+
+    This tool demonstrates:
+    - Base LLM Capabilities
+    - RAG (Retrieval Augmented Generation)
+    - Amazon Bedrock Integration
+    - Agent-based Learning Systems
+    """)
+
+
+# --------------------------- MAIN FUNCTION --------------------------- #
 def main():
+    render_header()
+    option = render_sidebar()
+
+    # Debug section at the bottom
+    with st.expander("Debug Information"):
+        st.json({
+            "selected_stage": option,
+            "transcript_loaded": st.session_state.transcript is not None,
+            "chat_messages": len(st.session_state.messages)
+        })
+
+    # Initialize sesion variables
     if 'conversation_history' not in st.session_state:
         st.session_state.conversation_history = []
 
@@ -91,7 +123,7 @@ def main():
         st.session_state.video["video_transcript"] = ""
 
     # --------------------------- CHAT PAGE  --------------------------- #
-    if option == "Chat with Assistant":
+    if option == "1. Chat with Assistant":
         st.title("Chat with Assistant")
         st.markdown("---")
         st.markdown(f"### Conversation History")
@@ -116,7 +148,7 @@ def main():
 
 
     # --------------------------- BASIC LLM CAP PAGE  --------------------------- #
-    elif option == "Raw Transcript":
+    elif option == "2. Raw Transcript":
         st.title("German Learning Assistant")
         st.write("Transform Youtube transcripts into interactive German learning experiences.")
         st.write("This tools demostrates: \n"
@@ -141,7 +173,10 @@ def main():
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Raw transcript")
-            st.write(st.session_state.video["video_transcript"])
+            if 'video_transcript' not in st.session_state.video:
+                st.info(f"Ingest a video URL to get the transcript.")
+            else:
+                st.write(st.session_state.video["video_transcript"])
         with col2:
             st.subheader("Transcript Stats")
 
@@ -159,7 +194,7 @@ def main():
 
 
 
-    elif option == "Agent-Based Alignment Generation":
+    elif option == "3. Structured Data":
         # Page Title
         st.title("Agent-Based Alignment Generation")
 
@@ -174,7 +209,7 @@ def main():
             # Placeholder alignment results
             st.success("Alignment results go here.")
 
-    elif option == "Agent-Based Reasoning Systems":
+    elif option == "4. RAG Implementation":
         # Page Title
         st.title("Agent-Based Reasoning Systems")
 
@@ -188,6 +223,22 @@ def main():
             st.write(f"Problem: {reasoning_prompt}")
             # Placeholder reasoning output
             st.warning("Reasoning steps or final answer go here.")
+
+    elif option == "5. Interactive Learning":
+        # Page Title
+        st.title("Interactive Learning")
+
+        # Example layout for Interactive Learning
+        st.subheader("Interactive Learning Environment")
+        st.write("Create a dynamic learning experience for users.")
+
+        st.markdown("**Interactive Learning**")
+        learning_scenario = st.text_area("Enter a learning scenario:")
+        if st.button("Generate Scenario"):
+            st.write(f"Scenario: {learning_scenario}")
+            # Placeholder interactive learning output
+            st.error("Interactive learning environment goes here.")
+
 
 if __name__ == "__main__":
     main()

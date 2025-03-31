@@ -35,11 +35,13 @@ Pull the youtube content, and use that to generate out similar style listening c
 * Must provide clear visualization of RAG process
 
 
-
-## Todo
-
-## Knowledgebase
-
-
-
+## How to run the frontend:
+``sh
+streamlit run app.py
+``
+## How to run the backend:
+``sh
+cd backend
+python main.py
+``
 

@@ -7,13 +7,16 @@ from botocore.exceptions import ClientError
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+AWS_MODEL_ID = "amazon.titan-text-express-v1"
+# AWS_MODEL_ID = "amazon.nova-micro-v1"
+
 class AWSBedrockClient:
     """
     A client for interacting with AWS Bedrock's LLM models.
     """
 
     def __init__(self,
-                 model_id="amazon.titan-text-express-v1",
+                 model_id=AWS_MODEL_ID,
                  region_name='eu-central-1'):
         self.model_id = model_id
         self.client = boto3.client(service_name='bedrock-runtime',

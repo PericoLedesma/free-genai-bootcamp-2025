@@ -45,4 +45,31 @@ def get_transcript(url):
     transcript_text = " ".join(segment['text'] for segment in transcript if segment['text'] != "[Music]")
     print("------ Transcript Text ------")
     # print(transcript_text)
+
+    if save_transcript(transcript, video_id):
+        print(f"Transcript saved to {video_id}.txt")
+    else:
+        print("Error saving transcript.")
     return transcript_text
+
+def save_transcript(transcript, filename: str) -> bool:
+    """
+    Save transcript to file
+
+    Args:
+        transcript (List[Dict]): Transcript data
+        filename (str): Output filename
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    filename = f"./transcripts/{filename}.txt"
+
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            for entry in transcript:
+                f.write(f"{entry['text']}\n")
+        return True
+    except Exception as e:
+        print(f"Error saving transcript: {str(e)}")
+        return False
