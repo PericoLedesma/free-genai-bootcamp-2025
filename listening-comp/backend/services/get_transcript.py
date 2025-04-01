@@ -1,75 +1,101 @@
 #!/usr/bin/env python3
-import sys
 import re
+import os
 from youtube_transcript_api import YouTubeTranscriptApi
+from typing import Optional, List, Dict
 
-DEFAULT_URL= "https://www.youtube.com/watch?v=PNTCM7cbrsc"
-#    https://www.youtube.com/watch?v=PNTCM7cbrsc
-def extract_video_id(url=DEFAULT_URL):
-    """Extracts the YouTube video ID from a URL."""
-    regex_patterns = [
-        r"youtu\.be\/([^?&]+)",
-        r"youtube\.com\/watch\?v=([^?&]+)",
-        r"youtube\.com\/embed\/([^?&]+)"
-    ]
-    for pattern in regex_patterns:
-        match = re.search(pattern, url)
-        if match:
-            return match.group(1)
-    return None
+TRANSCRIPT_FOLDER = "transcripts"
+
+class YouTubeTranscriptDownloader:
+    def __init__(self, video_url: str = None):
+        if "youtube.com" in video_url or "youtu.be" in video_url:
+            self.video_id = self.extract_video_id(video_url)
+
+        self.languages = List[str]
+        self.list_available_languages()
 
 
-def get_transcript(url):
-    if len(sys.argv) < 2:
-        print(f"No YouTube URL provided. Using default URL: {DEFAULT_URL}")
-        url = DEFAULT_URL
+    def list_available_languages(self) -> List:
+        try:
+            transcript_list = YouTubeTranscriptApi.list_transcripts(self.video_id)
+            self.languages = []
+            print("Available transcription languages:")
+
+            for transcript in transcript_list:
+                # transcript.language: the full language name (e.g., "English")
+                # transcript.language_code: the ISO language code (e.g., "en")
+                # transcript.is_generated: True if the transcript is auto-generated
+                transcript_type = "Auto-generated" if transcript.is_generated else "Manual"
+                print(f"{transcript.language} ({transcript.language_code}) - {transcript_type}")
+                # languages.append((transcript.language, transcript.language_code, transcript.is_generated))
+                self.languages.append(transcript.language_code)
+
+        except Exception as e:
+            print("Error retrieving transcript languages:", e)
+
+    def extract_video_id(self, url: str) -> Optional[str]:
+        if "v=" in url:
+            return url.split("v=")[1][:11]
+        elif "youtu.be/" in url:
+            return url.split("youtu.be/")[1][:11]
+        return None
+
+    def get_transcript(self) -> Optional[List[Dict]]:
+        if not self.video_id:
+            print("Invalid video ID or URL")
+            return None
+        print(f"Downloading transcript for video ID: {self.video_id}")
+
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(self.video_id, languages=self.languages)
+            return " ".join(segment['text'] for segment in transcript if segment['text'] != "[Music]")
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return None
+
+    def save_transcript(self, transcript: List[Dict]) -> bool:
+        if not os.path.exists(TRANSCRIPT_FOLDER):
+            os.makedirs(TRANSCRIPT_FOLDER)
+
+        filename = f"./{TRANSCRIPT_FOLDER}/{self.video_id}.txt"
+        try:
+            with open(filename, 'w', encoding='utf-8') as f:
+                # for entry in transcript:
+                #     f.write(f"{entry['text']}\n")
+                f.write(transcript)
+            print(f"Transcript saved successfully to {self.video_id}.txt")
+            return True
+        except Exception as e:
+            print(f"Error saving transcript: {str(e)}")
+            return False
+
+
+# ------------------ MAIN ------------------ #
+def get_transcript(video_url, print_transcript=False):
+    # Initialize downloader
+    downloader = YouTubeTranscriptDownloader(video_url)
+    transcript = downloader.get_transcript()
+    print("Transcript downloaded successfully")
+
+    if transcript:
+        # Save transcript
+        if downloader.save_transcript(transcript):
+            if print_transcript:
+                # Print transcript
+                for entry in transcript:
+                    print(f"{entry['text']}")
+        else:
+            print("Failed to save transcript")
+        return transcript
     else:
-        url = sys.argv[1]
+        print("Failed to get transcript and to send to frontend")
 
-    video_id = extract_video_id(url)
-    if not video_id:
-        print("Error: Could not extract video ID from the URL.")
-        sys.exit(1)
 
-    try:
-        transcript = YouTubeTranscriptApi.get_transcript(video_id)
-    except Exception as e:
-        print(f"Error fetching transcript: {e}")
-        sys.exit(1)
 
-    # # Print each transcript segment
-    # for segment in transcript:
-    #     print(segment['text'])
-    # print(transcript)
 
-    transcript_text = " ".join(segment['text'] for segment in transcript if segment['text'] != "[Music]")
-    print("------ Transcript Text ------")
-    # print(transcript_text)
+# ------------------ TEST ------------------ #
+if __name__ == "__main__":
+    # video_url = "https://www.youtube.com/watch?v=sY7L5cfCWno&list=PLkGU7DnOLgRMl-h4NxxrGbK-UdZHIXzKQ"
+    video_url = "https://www.youtube.com/watch?v=hhuNW1COrSM"
+    get_transcript(video_url, print_transcript=False)
 
-    if save_transcript(transcript, video_id):
-        print(f"Transcript saved to {video_id}.txt")
-    else:
-        print("Error saving transcript.")
-    return transcript_text
-
-def save_transcript(transcript, filename: str) -> bool:
-    """
-    Save transcript to file
-
-    Args:
-        transcript (List[Dict]): Transcript data
-        filename (str): Output filename
-
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    filename = f"./transcripts/{filename}.txt"
-
-    try:
-        with open(filename, 'w', encoding='utf-8') as f:
-            for entry in transcript:
-                f.write(f"{entry['text']}\n")
-        return True
-    except Exception as e:
-        print(f"Error saving transcript: {str(e)}")
-        return False

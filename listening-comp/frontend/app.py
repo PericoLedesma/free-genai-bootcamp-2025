@@ -102,13 +102,13 @@ def main():
     render_header()
     option = render_sidebar()
 
-    # Debug section at the bottom
-    with st.expander("Debug Information"):
-        st.json({
-            "selected_stage": option,
-            "transcript_loaded": st.session_state.transcript is not None,
-            "chat_messages": len(st.session_state.messages)
-        })
+    # # Debug section at the bottom
+    # with st.expander("Debug Information"):
+    #     st.json({
+    #         "selected_stage": option,
+    #         "transcript_loaded": st.session_state.transcript is not None,
+    #         "chat_messages": len(st.session_state.messages)
+    #     })
 
     # Initialize sesion variables
     if 'conversation_history' not in st.session_state:
@@ -147,7 +147,7 @@ def main():
 
 
 
-    # --------------------------- BASIC LLM CAP PAGE  --------------------------- #
+    # ------------------------------------------------------ #
     elif option == "2. Raw Transcript":
         st.title("German Learning Assistant")
         st.write("Transform Youtube transcripts into interactive German learning experiences.")
@@ -158,7 +158,7 @@ def main():
                  "- Agent-based learning systems")
 
         st.subheader("Raw transcript Processing")
-        url = st.text_input("Youtube URL")
+        url = st.text_input("Youtube URL:")
 
         if st.button("Accept"):
             st.session_state.video = {"url": url}
@@ -193,7 +193,7 @@ def main():
             st.subheader(st.session_state.video["line_count"])
 
 
-
+    # ------------------------------------------------------ #
     elif option == "3. Structured Data":
         # Page Title
         st.title("Agent-Based Alignment Generation")

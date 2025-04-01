@@ -13,11 +13,11 @@ bedrock_client = AWSBedrockClient()
 # ------------------ OPENAI CHAT ------------------ #
 @chat_router.post("/chatopenai/")
 async def chat_with_openai(request: ChatRequest):
+    print("\n\n===>ENDPOINT HIT: /chatopenai/")
     try:
         # Directly access the prompt attribute from the Pydantic model.
         if not request.prompt:
             raise HTTPException(status_code=400, detail="Missing prompt parameter in the JSON body.")
-
         prompt = request.prompt
         # return {"response": "Prompt: " + prompt}
         return {"response": openai_client.chat(request.prompt, request.model)}
@@ -35,6 +35,7 @@ curl -X POST \
 # ------------------ BEDROCK CHAT ------------------ #
 @chat_router.post("/chatbedrock/")
 async def chat_with_bedrock(request: ChatRequest):
+    print("\n\n===>ENDPOINT HIT: /chatbedrock/")
     try:
         if not request.prompt:
             raise HTTPException(status_code=400, detail="Missing prompt parameter in the JSON body.")
