@@ -26,7 +26,7 @@ class YouTubeTranscriptDownloader:
                 # transcript.language_code: the ISO language code (e.g., "en")
                 # transcript.is_generated: True if the transcript is auto-generated
                 transcript_type = "Auto-generated" if transcript.is_generated else "Manual"
-                print(f"{transcript.language} ({transcript.language_code}) - {transcript_type}")
+                print(f"\t{transcript.language} ({transcript.language_code}) - {transcript_type}")
                 # languages.append((transcript.language, transcript.language_code, transcript.is_generated))
                 self.languages.append(transcript.language_code)
 
@@ -71,22 +71,16 @@ class YouTubeTranscriptDownloader:
 
 
 # ------------------ MAIN ------------------ #
-def get_transcript(video_url, print_transcript=False):
-    # Initialize downloader
+def extract_transcript(video_url):
     downloader = YouTubeTranscriptDownloader(video_url)
     transcript = downloader.get_transcript()
     print("Transcript downloaded successfully")
 
     if transcript:
         # Save transcript
-        if downloader.save_transcript(transcript):
-            if print_transcript:
-                # Print transcript
-                for entry in transcript:
-                    print(f"{entry['text']}")
-        else:
+        if not downloader.save_transcript(transcript):
             print("Failed to save transcript")
-        return transcript
+        return downloader.video_id, transcript
     else:
         print("Failed to get transcript and to send to frontend")
 
@@ -95,7 +89,6 @@ def get_transcript(video_url, print_transcript=False):
 
 # ------------------ TEST ------------------ #
 if __name__ == "__main__":
-    # video_url = "https://www.youtube.com/watch?v=sY7L5cfCWno&list=PLkGU7DnOLgRMl-h4NxxrGbK-UdZHIXzKQ"
     video_url = "https://www.youtube.com/watch?v=hhuNW1COrSM"
-    get_transcript(video_url, print_transcript=False)
+    extract_transcript(video_url)
 

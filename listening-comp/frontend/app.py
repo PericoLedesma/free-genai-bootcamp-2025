@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import re
 
-from sidebar import render_sidebar
+from sideandheader import *
 
 BACKEND_URL = "http://127.0.0.1:8080"  # URL of the backend server
 
@@ -16,16 +16,6 @@ chat_service = st.sidebar.radio(
     ("OpenAI", "AWS Bedrock")
 )
 
-# # --- SIDEBAR NAVIGATION ---
-# option = st.sidebar.radio(
-#     "Navigation",
-#     (
-#         "Chat with Assistant",
-#         "Raw Transcript",
-#         "Agent-Based Alignment Generation",
-#         "Agent-Based Reasoning Systems",
-#     ),
-# )
 
 def chat_llm(user_input):
     try:
@@ -50,8 +40,9 @@ def get_transcript(url):
     try:
         response = requests.post(f"{BACKEND_URL}/transcript/", json={"url": url})
         response.raise_for_status()  # Raise an error for bad responses
-        transcript = response.json()  # Assume the API returns a JSON response
-        return transcript["transcript"]
+        video = response.json()  # Assume the API returns a JSON response
+        st.write(video)
+        return video["video_id"], video["transcript"]
     except Exception as e:
         st.error("Failed to get a response from the transcript endpoint: " + str(e))
 
@@ -83,18 +74,6 @@ def get_text_stats(text: str) -> dict:
 
 
 
-def render_header():
-    """Render the header section"""
-    st.title(" German Learning Assistant")
-    st.markdown("""
-    Transform YouTube transcripts into interactive Japanese learning experiences.
-
-    This tool demonstrates:
-    - Base LLM Capabilities
-    - RAG (Retrieval Augmented Generation)
-    - Amazon Bedrock Integration
-    - Agent-based Learning Systems
-    """)
 
 
 # --------------------------- MAIN FUNCTION --------------------------- #
@@ -121,6 +100,7 @@ def main():
         st.session_state.video["sentence_count"] = ""
         st.session_state.video["line_count"] = ""
         st.session_state.video["video_transcript"] = ""
+        st.session_state.video["video_id"] = ""
 
     # --------------------------- CHAT PAGE  --------------------------- #
     if option == "1. Chat with Assistant":
@@ -163,7 +143,9 @@ def main():
         if st.button("Accept"):
             st.session_state.video = {"url": url}
             st.info(f"Video URL: {url}")
-            st.session_state.video = {"video_transcript": get_transcript(url)}
+
+            st.session_state.video["video_id"], st.session_state.video["video_transcript"] = get_transcript(url)
+            # st.session_state.video["video_id"], st.session_state.video["video_transcript"] = "video_id", "video_transcript"
             text_stats = get_text_stats(st.session_state.video["video_transcript"])
             st.session_state.video["character_count"] = text_stats["character_count"]
             st.session_state.video["word_count"] = text_stats["word_count"]
@@ -196,18 +178,10 @@ def main():
     # ------------------------------------------------------ #
     elif option == "3. Structured Data":
         # Page Title
-        st.title("Agent-Based Alignment Generation")
+        st.title("Structured Data")
+        st.write("Video id: ",st.session_state.video["video_id"])
 
-        # Example layout for Agent-Based Alignment
-        st.subheader("Explore Model Alignment")
-        st.write("Show how the model aligns with complex tasks or constraints.")
 
-        st.markdown("**Alignment Demonstration**")
-        scenario = st.text_area("Enter a scenario to test model alignment:")
-        if st.button("Check Alignment"):
-            st.write(f"Scenario: {scenario}")
-            # Placeholder alignment results
-            st.success("Alignment results go here.")
 
     elif option == "4. RAG Implementation":
         # Page Title

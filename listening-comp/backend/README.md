@@ -42,7 +42,7 @@ Each endpoint corresponds to a specific feature:
 #### Example Endpoint Code (Chat):
 
 ```python
-# backend/app/api/endpoints/chat.py
+# backend/app/api/endpoints/chat_endpoint.py
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.core import llm_client

@@ -1,10 +1,8 @@
 from fastapi import APIRouter, HTTPException
-
-# from services.chat_claude import *
-from services.get_transcript import get_transcript
+from services.get_transcript import extract_transcript
 from models import TranscriptRequest
 
-DEFAULT_URL= "https://www.youtube.com/watch?v=gDg7rMJ9Odg&list=PLTF2DjpEk9qFI3npo8cw0cOk5dKGyaxNu"
+DEFAULT_URL= "https://www.youtube.com/watch?v=hhuNW1COrSM"
 
 transcript_router = APIRouter()
 
@@ -15,10 +13,13 @@ async def transcript(request: TranscriptRequest):
     print("\n\n===> ENDPOINT HIT: /transcript/")
     try:
         if not request.url:
-            return {"transcript": get_transcript(DEFAULT_URL)}
+            print("Ojo: No URL provided. Using default URL.")
+            video_id, transcript = extract_transcript(DEFAULT_URL)
             # raise HTTPException(status_code=400, detail="Missing url in the JSON body.")
         else:
-            return {"transcript": get_transcript(request.url)}
+            video_id, transcript = extract_transcript(request.url)
+
+        return {"video_id": video_id, "transcript": transcript}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

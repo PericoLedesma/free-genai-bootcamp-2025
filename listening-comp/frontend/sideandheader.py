@@ -1,5 +1,19 @@
 import streamlit as st
 
+def render_header():
+    """Render the header section"""
+    st.title(" German Learning Assistant")
+    st.markdown("""
+    Transform YouTube transcripts into interactive Japanese learning experiences.
+
+    This tool demonstrates:
+    - Base LLM Capabilities
+    - RAG (Retrieval Augmented Generation)
+    - Amazon Bedrock Integration
+    - Agent-based Learning Systems
+    """)
+
+
 def render_sidebar():
     """Render the sidebar with component selection"""
     with st.sidebar:

@@ -10,8 +10,8 @@ class ChatRequest(BaseModel):
 class TranscriptRequest(BaseModel):
     url: str
 
-class AlignmentRequest(BaseModel):
-    scenario: str
+class StructDataRequest(BaseModel):
+    model_id: str
 
 class ReasoningRequest(BaseModel):
     problem: str

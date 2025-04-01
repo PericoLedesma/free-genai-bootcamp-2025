@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
-from api.chat import chat_router
-from api.get_transcript import transcript_router
+from api.chat_endpoint import chat_router
+from api.get_transcript_endpoint import transcript_router
 # from app.api.endpoints import chat, grammar, alignment, reasoning
 
 # Parameters
