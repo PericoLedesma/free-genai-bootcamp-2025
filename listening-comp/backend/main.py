@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from api.chat_endpoint import chat_router
 from api.get_transcript_endpoint import transcript_router
+from api.structured_data_endpoint import struct_router
 # from app.api.endpoints import chat, grammar, alignment, reasoning
 
 # Parameters
@@ -12,6 +13,7 @@ PORT = 8080
 app = FastAPI(title="German Learning Assistant API")
 app.include_router(chat_router)
 app.include_router(transcript_router)
+app.include_router(struct_router)
 
 # # Include each router with a specific prefix and tag
 # app.include_router(chat.router, prefix="/chat", tags=["Chat"])

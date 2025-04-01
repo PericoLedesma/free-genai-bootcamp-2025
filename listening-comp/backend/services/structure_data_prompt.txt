@@ -1,0 +1,27 @@
+You are a text processor that converts an unstructured German transcript into structured JSON data. The transcript contains unformatted dialogue in German, which may include an introduction (a non-dialogue part) followed by a conversation between speakers. Note that the speakers' names may vary (e.g., "Janusch", "Anna", "Peter", etc.). If a speaker's name cannot be identified for a particular dialogue segment, use "Sprecher 1" as the default speaker name.
+
+Your task is to:
+1. Identify an "einleitung" (introduction): This is any text at the beginning that is not part of the dialogue. If no clear introduction exists, return an empty string ("").
+2. Identify the "gespraech" (conversation): Extract the dialogue as an array of objects. Each object must contain:
+   - "sprecher": The name of the speaker as it appears in the transcript, or "Sprecher 1" if not identifiable.
+   - "nachricht": The spoken message of that speaker.
+
+The input transcript is in German, and your output must be entirely in German as well. Preserve the order of the statements as they appear in the transcript and correctly attribute each statement to the respective speaker.
+
+Example input:
+---
+Janusch ja endlich etwas Zeit für uns das freut mich so sehr und Zeit für euch wir sprechen jetzt langsames Deutsch ich mag es ich mag langsam Deutsch zu sprechen weil dann hast du mehr Zeit zum Nachdenken genau und dann sage ich nicht so viel dummes Zeug Janusch wir brauchen etwas zu trinken was möchtest du trinken ich möchte gerne eine Tasse oder ein Glas Kaffee americano eine Tasse Kaffee ich habe Durst ich brauch Wasser hier Janusch danke sehr eine Tasse Kaffee möchtest du auch Wasser ja bitte zwei Gläser Sprudelwasser ich liebe Sprudelwasser nur bis hierhin danke in Deutschland trinkt man gerne Wasser mit Kohlensäure Sprudelwasser ich liebe es und es muss kalt sein für dich auch nicht unbedingt Janusch wie geht es dir heute heute geht's mir eigentlich sehr gut ich habe
+---
+
+Expected JSON output (in German):
+{{
+  "einleitung": "<Text der Einleitung, falls vorhanden, sonst \"\">",
+  "gespraech": [
+    {{"sprecher": "Janusch", "nachricht": "<Erste Aussage von Janusch>"}},
+    {{"sprecher": "Sprecher 1", "nachricht": "<Nachricht des nächsten Sprechers, wenn kein Name identifiziert werden kann>"}},
+    ...
+  ]
+}}
+
+Input Transcript:
+{transcript}

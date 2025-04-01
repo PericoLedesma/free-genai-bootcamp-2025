@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import json
 import re
 
 from sideandheader import *
@@ -24,7 +25,7 @@ def chat_llm(user_input):
             payload = {"model": "gpt-4o", "prompt": user_input}
         else:  # AWS Bedrock
             endpoint = f"{BACKEND_URL}/chatbedrock/"
-            payload = {"model": "gpt-4o", "prompt": user_input} #todo bedrock model
+            payload = {"model": "gpt-4o", "prompt": user_input}  # todo bedrock model
 
         response = requests.post(endpoint, json=payload)
         response.raise_for_status()  # Raise an error for bad responses
@@ -36,13 +37,13 @@ def chat_llm(user_input):
     except Exception as e:
         st.error("Failed to get a response from the chat endpoint: " + str(e))
 
+
 def get_transcript(url):
     try:
         response = requests.post(f"{BACKEND_URL}/transcript/", json={"url": url})
         response.raise_for_status()  # Raise an error for bad responses
         video = response.json()  # Assume the API returns a JSON response
-        st.write(video)
-        return video["video_id"], video["transcript"]
+        return video["video_title"], video["video_id"], video["transcript"]
     except Exception as e:
         st.error("Failed to get a response from the transcript endpoint: " + str(e))
 
@@ -73,9 +74,6 @@ def get_text_stats(text: str) -> dict:
 
 
 
-
-
-
 # --------------------------- MAIN FUNCTION --------------------------- #
 def main():
     render_header()
@@ -95,12 +93,6 @@ def main():
 
     if 'video' not in st.session_state:
         st.session_state.video = {}
-        st.session_state.video["character_count"] = ""
-        st.session_state.video["word_count"] = ""
-        st.session_state.video["sentence_count"] = ""
-        st.session_state.video["line_count"] = ""
-        st.session_state.video["video_transcript"] = ""
-        st.session_state.video["video_id"] = ""
 
     # --------------------------- CHAT PAGE  --------------------------- #
     if option == "1. Chat with Assistant":
@@ -129,22 +121,18 @@ def main():
 
     # ------------------------------------------------------ #
     elif option == "2. Raw Transcript":
-        st.title("German Learning Assistant")
-        st.write("Transform Youtube transcripts into interactive German learning experiences.")
-        st.write("This tools demostrates: \n"
-                 "- Base LLM capabilities\n "
-                 "- RAG capabilities\n "
-                 "- Amazon Bedrock capabilities\n"
-                 "- Agent-based learning systems")
-
         st.subheader("Raw transcript Processing")
-        url = st.text_input("Youtube URL:")
+        url = st.text_input("Youtube URL: (accept for default video)")
 
         if st.button("Accept"):
             st.session_state.video = {"url": url}
-            st.info(f"Video URL: {url}")
+            if url:
+                st.info(f"Video URL: {url}")
+            else:
+                st.info(f"Video URL: Default")
 
-            st.session_state.video["video_id"], st.session_state.video["video_transcript"] = get_transcript(url)
+            st.session_state.video["video_title"], st.session_state.video["video_id"], st.session_state.video[
+                "video_transcript"] = get_transcript(url)
             # st.session_state.video["video_id"], st.session_state.video["video_transcript"] = "video_id", "video_transcript"
             text_stats = get_text_stats(st.session_state.video["video_transcript"])
             st.session_state.video["character_count"] = text_stats["character_count"]
@@ -155,34 +143,77 @@ def main():
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Raw transcript")
+
             if 'video_transcript' not in st.session_state.video:
                 st.info(f"Ingest a video URL to get the transcript.")
             else:
                 st.write(st.session_state.video["video_transcript"])
+
         with col2:
             st.subheader("Transcript Stats")
+            if 'video_transcript' not in st.session_state.video:
+                st.info(f"Ingest a video URL to get the transcript.")
+            else:
+                st.write("character_count")
+                st.subheader(st.session_state.video["character_count"])
 
-            st.write("character_count")
-            st.subheader(st.session_state.video["character_count"])
+                st.write("word_count")
+                st.subheader(st.session_state.video["word_count"])
 
-            st.write("word_count")
-            st.subheader(st.session_state.video["word_count"])
+                st.write("sentence_count")
+                st.subheader(st.session_state.video["sentence_count"])
 
-            st.write("sentence_count")
-            st.subheader(st.session_state.video["sentence_count"])
-
-            st.write("line_count")
-            st.subheader(st.session_state.video["line_count"])
+                st.write("line_count")
+                st.subheader(st.session_state.video["line_count"])
 
 
     # ------------------------------------------------------ #
     elif option == "3. Structured Data":
-        # Page Title
-        st.title("Structured Data")
-        st.write("Video id: ",st.session_state.video["video_id"])
+
+        if 'video_id' not in st.session_state.video:
+            st.info(f"Transcript video first")
+        else:
+            try:
+                response = requests.post(f"{BACKEND_URL}/structdata/",
+                                         json={"video_id": st.session_state.video["video_id"]})
+
+                response.raise_for_status()  # Raise an error for bad responses
+                video = response.json()  # Assume the API returns a JSON response
+
+                # return video["transcript"]
+            except Exception as e:
+                st.error("Failed to get a response from the transcript endpoint: " + str(e))
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.subheader("Transcript Structuring")
+                st.markdown(f':red[Video title:]: **{st.session_state.video["video_title"]}**')
+                st.markdown(f':red[Transcript:]: {video["transcript"]}')
+            with col2:
+                st.subheader("Structured by people")
+
+                # If your JSON transcript is a string, convert it to a dictionary first
+                transcript_struc = video["struct_transcript"]
+                st.write(transcript_struc)
+
+                intro = transcript_struc["einleitung"]
+                st.markdown(f':red[Introduction]: {transcript_struc["einleitung"]}')
+
+                conversation = transcript_struc["gespraech"]
+                st.markdown(f':yellow[gespraech]: {transcript_struc["gespraech"]}')
+
+                # counter = 0 # todo
+                # st.write("CONVERSATION")
+                # for msg in transcript["gespraech"]:
+                #     if counter % 2 == 0:
+                #         st.markdown(f':red[{msg["sprecher"]}]: {msg["nachricht"]}')
+                #     else:
+                #         st.markdown(f':blue[{msg["sprecher"]}]: {msg["nachricht"]}')
+                #     counter += 1
 
 
 
+    # ------------------------------------------------------ #
     elif option == "4. RAG Implementation":
         # Page Title
         st.title("Agent-Based Reasoning Systems")

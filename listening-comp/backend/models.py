@@ -11,7 +11,7 @@ class TranscriptRequest(BaseModel):
     url: str
 
 class StructDataRequest(BaseModel):
-    model_id: str
+    video_id: str
 
 class ReasoningRequest(BaseModel):
     problem: str

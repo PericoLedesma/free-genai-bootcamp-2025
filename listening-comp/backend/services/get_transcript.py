@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-import re
 import os
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import Optional, List, Dict
+import yt_dlp
 
 TRANSCRIPT_FOLDER = "transcripts"
 
@@ -13,6 +12,9 @@ class YouTubeTranscriptDownloader:
 
         self.languages = List[str]
         self.list_available_languages()
+        self.video_url = video_url
+        self.title = self.get_video_title()
+        print(f"Video title: {self.title}")
 
 
     def list_available_languages(self) -> List:
@@ -69,6 +71,20 @@ class YouTubeTranscriptDownloader:
             print(f"Error saving transcript: {str(e)}")
             return False
 
+    def get_video_title(self):
+        ydl_opts = {
+            'quiet': True,
+            'skip_download': True,
+        }
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(self.video_url, download=False)
+                return info.get('title')
+        except Exception as e:
+            print("Error fetching video title:", e)
+            return None
+
+    # Example usage:
 
 # ------------------ MAIN ------------------ #
 def extract_transcript(video_url):
@@ -80,7 +96,7 @@ def extract_transcript(video_url):
         # Save transcript
         if not downloader.save_transcript(transcript):
             print("Failed to save transcript")
-        return downloader.video_id, transcript
+        return downloader.title, downloader.video_id, transcript
     else:
         print("Failed to get transcript and to send to frontend")
 

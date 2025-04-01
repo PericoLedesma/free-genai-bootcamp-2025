@@ -12,6 +12,7 @@ def render_header():
     - Amazon Bedrock Integration
     - Agent-based Learning Systems
     """)
+    st.divider()  # 👈 Draws a horizontal rule
 
 
 def render_sidebar():
