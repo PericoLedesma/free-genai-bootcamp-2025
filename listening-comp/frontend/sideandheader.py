@@ -4,10 +4,12 @@ def render_header():
     """Render the header section"""
     st.title(" German Learning Assistant")
     st.markdown("""
-    Transform YouTube transcripts into interactive Japanese learning experiences.
+    Transform YouTube transcripts into interactive German learning experiences.
 
     This tool demonstrates:
-    - Base LLM Capabilities
+    - Base LLM Capabilities ]\
+    '/
+    m,nb ][pk 
     - RAG (Retrieval Augmented Generation)
     - Amazon Bedrock Integration
     - Agent-based Learning Systems

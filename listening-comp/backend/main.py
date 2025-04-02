@@ -33,6 +33,7 @@ async def startup_event():
 
 if __name__ == '__main__':
     print("Running the server at http://")
+    print("Hola jaime")
     uvicorn.run("main:app",
                 host=HOST,
                 port=PORT,

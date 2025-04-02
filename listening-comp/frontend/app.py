@@ -35,7 +35,7 @@ def chat_llm(user_input):
 
         return assistant_message
     except Exception as e:
-        st.error("Failed to get a response from the chat endpoint: " + str(e))
+        st.error("Failed JAIME to get a response from the chat endpoint: " + str(e))
 
 
 def get_transcript(url):
