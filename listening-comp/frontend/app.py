@@ -118,7 +118,6 @@ def main():
             st.session_state.conversation_history.append({"role": "assistant", "message": assistant_message})
 
 
-
     # ------------------------------------------------------ #
     elif option == "2. Raw Transcript":
         st.subheader("Raw transcript Processing")
@@ -131,10 +130,9 @@ def main():
             else:
                 st.info(f"Video URL: Default")
 
-            st.session_state.video["video_title"], st.session_state.video["video_id"], st.session_state.video[
-                "video_transcript"] = get_transcript(url)
-            # st.session_state.video["video_id"], st.session_state.video["video_transcript"] = "video_id", "video_transcript"
-            text_stats = get_text_stats(st.session_state.video["video_transcript"])
+            st.session_state.video["title"], st.session_state.video["id"], st.session_state.video["transcript"] = get_transcript(url)
+
+            text_stats = get_text_stats(st.session_state.video["transcript"])
             st.session_state.video["character_count"] = text_stats["character_count"]
             st.session_state.video["word_count"] = text_stats["word_count"]
             st.session_state.video["sentence_count"] = text_stats["sentence_count"]
@@ -144,14 +142,14 @@ def main():
         with col1:
             st.subheader("Raw transcript")
 
-            if 'video_transcript' not in st.session_state.video:
+            if 'transcript' not in st.session_state.video:
                 st.info(f"Ingest a video URL to get the transcript.")
             else:
-                st.write(st.session_state.video["video_transcript"])
+                st.write(st.session_state.video["transcript"])
 
         with col2:
             st.subheader("Transcript Stats")
-            if 'video_transcript' not in st.session_state.video:
+            if 'transcript' not in st.session_state.video:
                 st.info(f"Ingest a video URL to get the transcript.")
             else:
                 st.write("character_count")
@@ -169,47 +167,46 @@ def main():
 
     # ------------------------------------------------------ #
     elif option == "3. Structured Data":
-
-        if 'video_id' not in st.session_state.video:
+        if 'id' not in st.session_state.video:
             st.info(f"Transcript video first")
+
         else:
-            try:
-                response = requests.post(f"{BACKEND_URL}/structdata/",
-                                         json={"video_id": st.session_state.video["video_id"]})
+            if 'struc_transcript' not in st.session_state:
+                st.info(f"Structuring transcript  ... video id {st.session_state.video['id']}")
+                try:
+                    response = requests.post(f"{BACKEND_URL}/structdata/",
+                                             json={"id": st.session_state.video["id"]})
 
-                response.raise_for_status()  # Raise an error for bad responses
-                video = response.json()  # Assume the API returns a JSON response
+                    response.raise_for_status()  # Raise an error for bad responses
+                    video = response.json()  # Assume the API returns a JSON response
+                    st.session_state.struc_transcript = video["struct_transcript"]
+                except Exception as e:
+                    st.error("Failed to get a response from the transcript endpoint: " + str(e))
 
-                # return video["transcript"]
-            except Exception as e:
-                st.error("Failed to get a response from the transcript endpoint: " + str(e))
-
+            st.success(f"Transcript structured")
             col1, col2 = st.columns(2)
             with col1:
-                st.subheader("Transcript Structuring")
-                st.markdown(f':red[Video title:]: **{st.session_state.video["video_title"]}**')
-                st.markdown(f':red[Transcript:]: {video["transcript"]}')
+                st.subheader("Transcript")
+                st.markdown(f':red[Video title:]: **{st.session_state.video["title"]}**')
+                st.markdown(f':red[Transcript:]: {st.session_state.video["transcript"]}')
+                st.markdown(f':red[Transcript:]: {st.session_state.video["transcript"]}')
+
             with col2:
-                st.subheader("Structured by people")
+                st.subheader("Structured")
+                transcript_struc = json.loads(st.session_state.struc_transcript)
 
-                # If your JSON transcript is a string, convert it to a dictionary first
-                transcript_struc = video["struct_transcript"]
-                st.write(transcript_struc)
+                if transcript_struc["einleitung"] and transcript_struc["einleitung"]!="":
+                    st.markdown(f"Einleitug: **{transcript_struc['einleitung']}**")
+                else:
+                    st.markdown("No einleitung")
+                st.markdown("---")
 
-                intro = transcript_struc["einleitung"]
-                st.markdown(f':red[Introduction]: {transcript_struc["einleitung"]}')
-
-                conversation = transcript_struc["gespraech"]
-                st.markdown(f':yellow[gespraech]: {transcript_struc["gespraech"]}')
-
-                # counter = 0 # todo
-                # st.write("CONVERSATION")
-                # for msg in transcript["gespraech"]:
-                #     if counter % 2 == 0:
-                #         st.markdown(f':red[{msg["sprecher"]}]: {msg["nachricht"]}')
-                #     else:
-                #         st.markdown(f':blue[{msg["sprecher"]}]: {msg["nachricht"]}')
-                #     counter += 1
+                chat = transcript_struc["gespraech"]
+                for msg in chat:
+                    with st.chat_message(msg["sprecher"]):
+                        #st.markdown(f'{msg["nachricht"]}')
+                        #st.markdown(f'{msg["sprecher"]}->{msg["nachricht"]}')
+                        st.markdown(f':red[{msg["sprecher"]}]: {msg["nachricht"]}')
 
 
 
