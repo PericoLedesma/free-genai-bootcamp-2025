@@ -55,7 +55,7 @@ class StructuredData:
         # tokenized = encoding.encode(prompt.content)
         # token_count = len(tokenized)
         # print(f"Token count: {token_count}")
-        print("-" * 50)
+
         try:
             response = self.llm.invoke(prompt)
         except Exception as e:

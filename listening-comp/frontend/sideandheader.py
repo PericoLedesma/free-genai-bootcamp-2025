@@ -7,9 +7,7 @@ def render_header():
     Transform YouTube transcripts into interactive German learning experiences.
 
     This tool demonstrates:
-    - Base LLM Capabilities ]\
-    '/
-    m,nb ][pk 
+    - Base LLM Capabilities
     - RAG (Retrieval Augmented Generation)
     - Amazon Bedrock Integration
     - Agent-based Learning Systems

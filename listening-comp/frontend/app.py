@@ -169,7 +169,6 @@ def main():
     elif option == "3. Structured Data":
         if 'id' not in st.session_state.video:
             st.info(f"Transcript video first")
-
         else:
             if 'struc_transcript' not in st.session_state:
                 st.info(f"Structuring transcript  ... video id {st.session_state.video['id']}")
@@ -180,10 +179,10 @@ def main():
                     response.raise_for_status()  # Raise an error for bad responses
                     video = response.json()  # Assume the API returns a JSON response
                     st.session_state.struc_transcript = video["struct_transcript"]
+                    st.success(f"Transcript structured")
                 except Exception as e:
                     st.error("Failed to get a response from the transcript endpoint: " + str(e))
 
-            st.success(f"Transcript structured")
             col1, col2 = st.columns(2)
             with col1:
                 st.subheader("Transcript")
@@ -207,8 +206,6 @@ def main():
                         #st.markdown(f'{msg["nachricht"]}')
                         #st.markdown(f'{msg["sprecher"]}->{msg["nachricht"]}')
                         st.markdown(f':red[{msg["sprecher"]}]: {msg["nachricht"]}')
-
-
 
     # ------------------------------------------------------ #
     elif option == "4. RAG Implementation":
