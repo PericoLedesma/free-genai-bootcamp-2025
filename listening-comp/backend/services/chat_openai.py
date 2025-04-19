@@ -3,6 +3,7 @@ from openai import OpenAI
 
 class ChatOpenAI:
     def __init__(self):
+        print("Initializing ChatOpenAI client...")
         self.client = OpenAI()
         self.conversation = []  # This list will hold the conversation history
 

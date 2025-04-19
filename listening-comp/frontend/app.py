@@ -35,7 +35,7 @@ def chat_llm(user_input):
 
         return assistant_message
     except Exception as e:
-        st.error("Failed JAIME to get a response from the chat endpoint: " + str(e))
+        st.error("Failed to get a response from the chat endpoint: " + str(e))
 
 
 def get_transcript(url):
@@ -209,16 +209,12 @@ def main():
 
     # ------------------------------------------------------ #
     elif option == "4. RAG Implementation":
-        # Page Title
-        st.title("Agent-Based Reasoning Systems")
+        # I am going to store the conversation in vectors
+        # First lets print the number of vectors stored
 
-        # Example layout for Reasoning Systems
-        st.subheader("Multi-step Reasoning and Chain-of-Thought")
-        st.write("Demonstrate or test advanced reasoning capabilities.")
-
-        st.markdown("**Reasoning Example**")
-        reasoning_prompt = st.text_area("Enter a complex problem to solve:")
-        if st.button("Run Reasoning"):
+        st.markdown("**RAG Example**")
+        reasoning_prompt = st.text_area("Enter a topic or question related to the conversation:")
+        if st.button("Search about a topic"):
             st.write(f"Problem: {reasoning_prompt}")
             # Placeholder reasoning output
             st.warning("Reasoning steps or final answer go here.")

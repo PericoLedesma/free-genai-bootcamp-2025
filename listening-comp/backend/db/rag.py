@@ -1,49 +1,91 @@
-b
+import chromadb
 import numpy as np
 
-# Dummy embedding function for demonstration purposes
-def dummy_embedding(text):
-    # Returns a fixed random vector based on the text hash for reproducibility
-    np.random.seed(hash(text) % 2**32)
-    return np.random.rand(128).tolist()
+
+class VectorDB:
+    def __init__(self, persist_directory: str):
+        print("Initializing VectorDB...")
+        # use the new PersistentClient API
+        self.client = chromadb.PersistentClient(path=persist_directory)
+        # get or create our chunks collection
+        self.collection = self.client.get_or_create_collection("conversation_chunks")
+        print("Collections:", self.client.list_collections())
 
 
-def main():
-    # Initialize Chroma client
-    client = chromadb.Client()
+    def _next_chunk_id(self, conversation_id: str) -> str:
+        """Compute next chunk_id = '{conversation_id}_{n+1}'."""
+        # fetch existing chunks for this conversation
+        convo = self.collection.get(where={"conversation_id": conversation_id})
+        existing_count = len(convo["ids"])
+        return f"{conversation_id}_{existing_count + 1}"
 
-    # Create or get a collection for documents
-    collection_name = 'document_collection'
-    collection = client.get_or_create_collection(name=collection_name)
+    def add_chunk(
+        self,
+        conversation_id: str,
+        embedding: list[float],
+        text: str,
+        metadata: dict | None = None
+    ) -> str:
+        """
+        Add a chunk to the DB, auto‑assigning chunk_id.
+        Returns the chunk_id used.
+        """
+        chunk_id = self._next_chunk_id(conversation_id)
+        md = metadata.copy() if metadata else {}
+        md.update({
+            "conversation_id": conversation_id,
+            "text": text
+        })
+        self.collection.add(
+            ids=[chunk_id],
+            embeddings=[embedding],
+            metadatas=[md]
+        )
+        return chunk_id
 
-    # Example documents to add to the vector db
-    documents = [
-        {'id': 'doc1', 'content': 'This is the first document.', 'metadata': {'source': 'manual'}},
-        {'id': 'doc2', 'content': 'This is the second document.', 'metadata': {'source': 'manual'}}
-    ]
+    def search_chunks(self, query_embedding: list[float], top_k: int = 5):
+        """Return the top_k most similar chunks."""
+        return self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k
+        )
 
-    # Prepare data for adding
-    ids = [doc['id'] for doc in documents]
-    contents = [doc['content'] for doc in documents]
-    metadatas = [doc['metadata'] for doc in documents]
-    embeddings = [dummy_embedding(content) for content in contents]
+    def get_chunks_by_conversation(self, conversation_id: str):
+        """Fetch all chunks for a given conversation."""
+        return self.collection.get(where={"conversation_id": conversation_id})
 
-    # Add documents to the collection
-    collection.add(
-        ids=ids,
-        documents=contents,
-        metadatas=metadatas,
-        embeddings=embeddings
+
+if __name__ == "__main__":
+    db = VectorDB()
+
+    conv_id = "conv001"
+    # first chunk
+    cid1 = db.add_chunk(
+        conversation_id=conv_id,
+        embedding=np.random.rand(10).tolist(),
+        text="Hey, how are you doing today?",
+        metadata={"speaker": "user", "timestamp": "2025-04-18T10:00:00"}
     )
+    print(f"Added chunk: {cid1}")
 
-    # Example query: retrieve similar document for a given query text
-    query_text = 'first'
-    query_embedding = dummy_embedding(query_text)
-    results = collection.query(query_embeddings=[query_embedding], n_results=1)
+    # second chunk
+    cid2 = db.add_chunk(
+        conversation_id=conv_id,
+        embedding=np.random.rand(10).tolist(),
+        text="I'm great, thanks for asking!",
+        metadata={"speaker": "assistant", "timestamp": "2025-04-18T10:00:05"}
+    )
+    print(f"Added chunk: {cid2}")
 
-    print('Query results for:', query_text)
-    print(results)
+    # semantic search
+    query = np.random.rand(10).tolist()
+    res = db.search_chunks(query, top_k=3)
+    print("\n🔍 Top similar chunks:")
+    for cid, md in zip(res["ids"][0], res["metadatas"][0]):
+        print(f" - {cid} [{md['conversation_id']}]: {md['text']}")
 
-
-if __name__ == '__main__':
-    main()
+    # fetch full conversation
+    convo = db.get_chunks_by_conversation(conv_id)
+    print(f"\n🧵 Full conversation '{conv_id}':")
+    for cid, md in zip(convo["ids"], convo["metadatas"]):
+        print(f" • {cid}: {md['text']}")

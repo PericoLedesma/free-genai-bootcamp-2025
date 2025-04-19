@@ -13,5 +13,7 @@ class TranscriptRequest(BaseModel):
 class StructDataRequest(BaseModel):
     id: str
 
-class ReasoningRequest(BaseModel):
-    problem: str
+class RAGRequest(BaseModel):
+    conv_id: str
+    text: str
+    speaker: str

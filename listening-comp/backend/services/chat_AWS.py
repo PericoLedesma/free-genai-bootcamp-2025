@@ -18,6 +18,7 @@ class AWSBedrockClient:
     def __init__(self,
                  model_id=AWS_MODEL_ID,
                  region_name='eu-central-1'):
+        print(f"Initializing AWSBedrockClient .....")
         self.model_id = model_id
         self.client = boto3.client(service_name='bedrock-runtime',
                                    region_name=region_name)
@@ -69,6 +70,8 @@ if __name__ == "__main__":
     print(f"Response: {response}")
     logger.info("Done.")
 
-# New endpoint to talk to AWS Bedrock service
+'''# New endpoint to talk to AWS Bedrock service
+print("herre")
 bedrock_client = AWSBedrockClient()
 
+'''

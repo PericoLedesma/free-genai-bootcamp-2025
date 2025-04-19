@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from models import ChatRequest
 
-# from services.chat_claude import *
 from services.chat_AWS import AWSBedrockClient
 from services.chat_openai import ChatOpenAI
 
 chat_router = APIRouter()
+
+# Initialize the clients for OpenAI and AWS Bedrock
 openai_client = ChatOpenAI()
 bedrock_client = AWSBedrockClient()
-
 
 # ------------------ OPENAI CHAT ------------------ #
 @chat_router.post("/chatopenai/")

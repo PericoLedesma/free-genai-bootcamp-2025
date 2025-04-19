@@ -1,7 +1,9 @@
 import os
+import tiktoken
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
-import tiktoken
+
+
 
 TRANSCRIPT_FOLDER = 'transcripts'
 
@@ -69,9 +71,25 @@ def lets_structure_data(video_id):
     print(f"Structuring data for video ID: {video_id}")
     struct_data_class = StructuredData(video_id)
     struct_data = struct_data_class.structure_data()
+    print(f"Structured data: {struct_data}")
 
     return struct_data_class.transcript, struct_data
 
 
 if __name__ == '__main__':
-    lets_structure_data("test2")
+    import os
+
+    # Print the current working directory
+    print(os.getcwd())
+
+    import sys
+    import pprint
+
+    pprint.pprint(sys.path)
+    print("--")
+    import os
+
+    project_root = os.getcwd()  # or specify the path to your project
+    print("In project root:", project_root)
+    print(os.listdir(project_root))
+    #lets_structure_data("test2")
